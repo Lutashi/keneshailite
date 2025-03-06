@@ -594,10 +594,12 @@ document.addEventListener('DOMContentLoaded', function() {
           body: JSON.stringify(formData)
         });
 
+        console.log('Response status:', response.status);
+
         if (!response.ok) {
           const errorData = await response.json();
           console.error('Server error response:', errorData);
-          throw new Error(errorData.message || `Server error: ${response.status}`);
+          throw new Error(errorData.details || `Server error: ${response.status}`);
         }
 
         const result = await response.json();
