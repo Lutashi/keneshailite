@@ -575,19 +575,40 @@ document.addEventListener('DOMContentLoaded', function() {
           name: this.name.value,
           email: this.email.value,
           phone: this.phone.value,
-          program: "MENTOR APPLICATION",  // Use this field to identify mentor applications
-          note: `University: ${this.university.value}\nMajor: ${this.major.value}\nYear: ${this.year.value}\nExperience: ${this.experience.value}\nMotivation: ${this.motivation.value}\nAvailability: ${this.availability.value} hours/week`,
-          preferredTime: "Any",  // Required field for consultation API
-          preferredDate: new Date().toISOString().split('T')[0]  // Required field for consultation API
+          location: "N/A", // Required field
+          major: this.major.value,
+          education: this.university.value,
+          goals: this.motivation.value,
+          program: "MENTOR APPLICATION",
+          preferredTime: "Any",
+          preferredDate: new Date().toISOString().split('T')[0],
+          ielts: {
+            status: "not_required",
+            score: null
+          },
+          sat: {
+            status: "not_required",
+            english: null,
+            math: null
+          },
+          age: "N/A",
+          extracurriculars: [],
+          honors: [],
+          note: `Year of Study: ${this.year.value}\nTeaching Experience: ${this.experience.value}\nWeekly Availability: ${this.availability.value} hours/week`
         };
+
+        console.log('Sending mentor application:', formData);
 
         const response = await fetch('https://keneshai-backend.onrender.com/api/consultation', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Accept': 'application/json'
           },
           body: JSON.stringify(formData)
         });
+
+        console.log('Response status:', response.status);
 
         const result = await response.json();
 
