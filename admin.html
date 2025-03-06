@@ -100,7 +100,7 @@
     <script>
         async function fetchSubmissions() {
             try {
-                const response = await fetch('http://localhost:3000/api/submissions');
+                const response = await fetch('https://keneshai-backend.onrender.com/api/submissions');
                 const submissions = await response.json();
                 displaySubmissions(submissions);
             } catch (error) {
@@ -201,7 +201,7 @@
         }
 
         function exportToCSV() {
-            fetch('http://localhost:3000/api/export')
+            fetch('https://keneshai-backend.onrender.com/api/export')
                 .then(response => response.blob())
                 .then(blob => {
                     const url = window.URL.createObjectURL(blob);

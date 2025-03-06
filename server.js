@@ -4,13 +4,19 @@ const cors = require('cors');
 const json2csv = require('json2csv').parse;
 const app = express();
 
+// CORS configuration
+app.use(cors({
+    origin: ['https://lutashi.github.io', 'http://localhost:3000'],
+    methods: ['GET', 'POST'],
+    credentials: true
+}));
+
 // Middleware
-app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
 // MongoDB Connection
-mongoose.connect('mongodb://localhost:27017/keneshai', {
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/keneshai', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })

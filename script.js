@@ -64,33 +64,35 @@ document.querySelectorAll('.mentor').forEach(mentor => {
 document.addEventListener('DOMContentLoaded', function() {
   /*** Typed Text Animation ***/
   const typedTextSpan = document.querySelector('.typed-text');
-  const textArray = ["начинается здесь", "только с нами", "ждет вас"];
-  let textArrayIndex = 0;
-  let charIndex = 0;
+  if (typedTextSpan) {
+    const textArray = ["начинается здесь", "только с нами", "ждет вас"];
+    let textArrayIndex = 0;
+    let charIndex = 0;
 
-  function type() {
-    if (charIndex < textArray[textArrayIndex].length) {
-      typedTextSpan.textContent += textArray[textArrayIndex].charAt(charIndex);
-      charIndex++;
-      setTimeout(type, 100);
-    } else {
-      setTimeout(erase, 1000);
+    function type() {
+      if (charIndex < textArray[textArrayIndex].length) {
+        typedTextSpan.textContent += textArray[textArrayIndex].charAt(charIndex);
+        charIndex++;
+        setTimeout(type, 100);
+      } else {
+        setTimeout(erase, 1000);
+      }
     }
-  }
 
-  function erase() {
-    if (charIndex > 0) {
-      typedTextSpan.textContent = textArray[textArrayIndex].substring(0, charIndex - 1);
-      charIndex--;
-      setTimeout(erase, 50);
-    } else {
-      textArrayIndex = (textArrayIndex + 1) % textArray.length;
-      setTimeout(type, 500);
+    function erase() {
+      if (charIndex > 0) {
+        typedTextSpan.textContent = textArray[textArrayIndex].substring(0, charIndex - 1);
+        charIndex--;
+        setTimeout(erase, 50);
+      } else {
+        textArrayIndex = (textArrayIndex + 1) % textArray.length;
+        setTimeout(type, 500);
+      }
     }
-  }
 
-  if (textArray.length) {
-    setTimeout(type, 1000);
+    if (textArray.length) {
+      setTimeout(type, 1000);
+    }
   }
 
   /*** Smooth Scroll for CTA Button ***/
@@ -107,37 +109,43 @@ document.addEventListener('DOMContentLoaded', function() {
 
   /*** Counters Animation ***/
   const counters = document.querySelectorAll('.stat h3');
-  const speed = 200;
-  counters.forEach(counter => {
-    const updateCount = () => {
-      const target = +counter.getAttribute('data-count');
-      const count = +counter.innerText;
-      const increment = target / speed;
+  if (counters.length > 0) {
+    const speed = 200;
+    counters.forEach(counter => {
+      const updateCount = () => {
+        const target = +counter.getAttribute('data-count');
+        const count = +counter.innerText;
+        const increment = target / speed;
 
-      if (count < target) {
-        counter.innerText = Math.ceil(count + increment);
-        setTimeout(updateCount, 10);
-      } else {
-        counter.innerText = target;
-      }
-    };
-    updateCount();
-  });
+        if (count < target) {
+          counter.innerText = Math.ceil(count + increment);
+          setTimeout(updateCount, 10);
+        } else {
+          counter.innerText = target;
+        }
+      };
+      updateCount();
+    });
+  }
 
   /*** FAQ Toggle ***/
   const faqQuestions = document.querySelectorAll('.faq-question');
-  faqQuestions.forEach(question => {
-    question.addEventListener('click', () => {
-      const answer = question.nextElementSibling;
-      const isActive = answer.classList.contains('active');
-      document.querySelectorAll('.faq-answer').forEach(item => {
-        item.classList.remove('active');
+  if (faqQuestions.length > 0) {
+    faqQuestions.forEach(question => {
+      question.addEventListener('click', () => {
+        const answer = question.nextElementSibling;
+        if (answer) {
+          const isActive = answer.classList.contains('active');
+          document.querySelectorAll('.faq-answer').forEach(item => {
+            item.classList.remove('active');
+          });
+          if (!isActive) {
+            answer.classList.add('active');
+          }
+        }
       });
-      if (!isActive) {
-        answer.classList.add('active');
-      }
     });
-  });
+  }
 
   /*** Starry Background Functions ***/
   function createStars() {
@@ -227,41 +235,46 @@ document.addEventListener('DOMContentLoaded', function() {
   createParallaxStars();
 
   /*** Smooth Hover Effect for Mentors ***/
-  document.querySelectorAll('.mentor').forEach(mentor => {
-    mentor.addEventListener('mousemove', (e) => {
-      const rect = mentor.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      mentor.style.transform = `
-        perspective(1000px)
-        rotateX(${(y - rect.height / 2) / 10}deg)
-        rotateY(${-(x - rect.width / 2) / 10}deg)
-        translateY(-10px)
-      `;
-    });
+  const mentors = document.querySelectorAll('.mentor');
+  if (mentors.length > 0) {
+    mentors.forEach(mentor => {
+      mentor.addEventListener('mousemove', (e) => {
+        const rect = mentor.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        mentor.style.transform = `
+          perspective(1000px)
+          rotateX(${(y - rect.height / 2) / 10}deg)
+          rotateY(${-(x - rect.width / 2) / 10}deg)
+          translateY(-10px)
+        `;
+      });
 
-    mentor.addEventListener('mouseleave', () => {
-      mentor.style.transform = 'translateY(-10px)';
+      mentor.addEventListener('mouseleave', () => {
+        mentor.style.transform = 'translateY(-10px)';
+      });
     });
-  });
+  }
 
   /*** Scroll Animations ***/
   const sections = document.querySelectorAll('section');
-  const options = {
-    threshold: 0.3
-  };
+  if (sections.length > 0) {
+    const options = {
+      threshold: 0.3
+    };
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-      }
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, options);
+
+    sections.forEach(section => {
+      observer.observe(section);
     });
-  }, options);
-
-  sections.forEach(section => {
-    observer.observe(section);
-  });
+  }
 
   // Read More functionality for review cards
   const readMoreButtons = document.querySelectorAll('.read-more-btn');
@@ -310,83 +323,103 @@ document.addEventListener('DOMContentLoaded', function() {
   if (consultationForm) {
     consultationForm.addEventListener('submit', async function(e) {
       e.preventDefault();
+      console.log('Form submission started');
       
       const submitBtn = this.querySelector('.submit-btn');
+      if (!submitBtn) return;
+      
       submitBtn.disabled = true;
       submitBtn.textContent = 'Отправка...';
       
       try {
         // Get form data
         const formData = {
-          name: document.getElementById('name').value,
-          email: document.getElementById('email').value,
-          phone: document.getElementById('phone').value,
-          location: document.getElementById('location').value,
-          major: document.getElementById('major').value,
+          name: document.getElementById('name')?.value || '',
+          email: document.getElementById('email')?.value || '',
+          phone: document.getElementById('phone')?.value || '',
+          location: document.getElementById('location')?.value || '',
+          major: document.getElementById('major')?.value || '',
           ielts: {
-            status: document.getElementById('ielts_status').value,
-            score: document.getElementById('ielts_score').value
+            status: document.getElementById('ielts_status')?.value || '',
+            score: document.getElementById('ielts_score')?.value || null
           },
           sat: {
-            status: document.getElementById('sat_status').value,
-            english: document.getElementById('sat_english').value,
-            math: document.getElementById('sat_math').value
+            status: document.getElementById('sat_status')?.value || '',
+            english: document.getElementById('sat_english')?.value || null,
+            math: document.getElementById('sat_math')?.value || null
           },
-          age: document.getElementById('age').value,
+          age: document.getElementById('age')?.value || '',
           extracurriculars: [],
           honors: [],
-          education: document.getElementById('education').value,
-          goals: document.getElementById('goals').value
+          education: document.getElementById('education')?.value || '',
+          goals: document.getElementById('goals')?.value || ''
         };
+
+        console.log('Form data collected:', formData);
 
         // Get extracurricular activities
         const extracurricularsContainer = document.getElementById('extracurriculars_container');
-        const extracurricularInputs = extracurricularsContainer.querySelectorAll('input[type="text"]');
-        const extracurricularTextareas = extracurricularsContainer.querySelectorAll('textarea');
-        
-        for (let i = 0; i < extracurricularInputs.length; i++) {
-          formData.extracurriculars.push({
-            activity: extracurricularInputs[i].value,
-            description: extracurricularTextareas[i].value
-          });
+        if (extracurricularsContainer) {
+          const extracurricularInputs = extracurricularsContainer.querySelectorAll('input[type="text"]');
+          const extracurricularTextareas = extracurricularsContainer.querySelectorAll('textarea');
+          
+          for (let i = 0; i < extracurricularInputs.length; i++) {
+            formData.extracurriculars.push({
+              activity: extracurricularInputs[i].value,
+              description: extracurricularTextareas[i]?.value || ''
+            });
+          }
         }
 
         // Get honors
         const honorsContainer = document.getElementById('honors_container');
-        const honorsInputs = honorsContainer.querySelectorAll('input[type="text"]');
-        const honorsTextareas = honorsContainer.querySelectorAll('textarea');
-        
-        for (let i = 0; i < honorsInputs.length; i++) {
-          formData.honors.push({
-            title: honorsInputs[i].value,
-            description: honorsTextareas[i].value
-          });
+        if (honorsContainer) {
+          const honorsInputs = honorsContainer.querySelectorAll('input[type="text"]');
+          const honorsTextareas = honorsContainer.querySelectorAll('textarea');
+          
+          for (let i = 0; i < honorsInputs.length; i++) {
+            formData.honors.push({
+              title: honorsInputs[i].value,
+              description: honorsTextareas[i]?.value || ''
+            });
+          }
         }
 
-        const response = await fetch('http://localhost:3000/api/consultation', {
+        console.log('Sending request to:', 'https://keneshai-backend.onrender.com/api/consultation');
+        
+        const response = await fetch('https://keneshai-backend.onrender.com/api/consultation', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
           },
           body: JSON.stringify(formData)
         });
 
+        console.log('Response received:', response);
+
         if (response.ok) {
+          const responseData = await response.json();
+          console.log('Success response:', responseData);
           alert('Спасибо за вашу заявку! Мы свяжемся с вами в ближайшее время.');
           consultationForm.reset();
           
           // Clear dynamic fields
-          document.getElementById('extracurriculars_container').innerHTML = '';
-          document.getElementById('honors_container').innerHTML = '';
+          if (extracurricularsContainer) extracurricularsContainer.innerHTML = '';
+          if (honorsContainer) honorsContainer.innerHTML = '';
         } else {
-          throw new Error('Error submitting form');
+          const errorData = await response.text();
+          console.error('Server error response:', errorData);
+          throw new Error(`Server error: ${response.status}`);
         }
       } catch (error) {
-        console.error('Error:', error);
+        console.error('Submission error:', error);
         alert('Произошла ошибка при отправке формы. Пожалуйста, попробуйте позже.');
       } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Записаться на консультацию';
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Записаться на консультацию';
+        }
       }
     });
   }
@@ -395,7 +428,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const ieltsStatus = document.getElementById('ielts_status');
   const ieltsScore = document.getElementById('ielts_score');
   
-  if (ieltsStatus) {
+  if (ieltsStatus && ieltsScore) {
     ieltsStatus.addEventListener('change', function() {
       ieltsScore.style.display = this.value === 'taken' ? 'block' : 'none';
     });
@@ -405,7 +438,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const satStatus = document.getElementById('sat_status');
   const satScores = document.getElementById('sat_scores');
   
-  if (satStatus) {
+  if (satStatus && satScores) {
     satStatus.addEventListener('change', function() {
       satScores.style.display = this.value === 'taken' ? 'flex' : 'none';
     });
@@ -416,6 +449,8 @@ document.addEventListener('DOMContentLoaded', function() {
   if (extracurricularsCount) {
     extracurricularsCount.addEventListener('change', function() {
       const container = document.getElementById('extracurriculars_container');
+      if (!container) return;
+      
       container.innerHTML = '';
       container.classList.add('visible');
 
@@ -440,6 +475,8 @@ document.addEventListener('DOMContentLoaded', function() {
   if (honorsCount) {
     honorsCount.addEventListener('change', function() {
       const container = document.getElementById('honors_container');
+      if (!container) return;
+      
       container.innerHTML = '';
       container.classList.add('visible');
 
