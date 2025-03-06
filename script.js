@@ -572,29 +572,29 @@ document.addEventListener('DOMContentLoaded', function() {
       try {
         // Format data to match consultation endpoint expectations
         const formData = {
-          name: this.name.value,
-          email: this.email.value,
-          phone: this.phone.value,
-          location: "N/A", // Required field
-          major: this.major.value,
-          education: this.university.value,
-          goals: this.motivation.value,
-          program: "MENTOR APPLICATION",
-          preferredTime: "Any",
+          name: this.querySelector('[name="name"]').value,
+          email: this.querySelector('[name="email"]').value,
+          phone: this.querySelector('[name="phone"]').value,
+          location: "Kazakhstan",
+          major: this.querySelector('[name="major"]').value,
+          education: this.querySelector('[name="university"]').value,
+          goals: this.querySelector('[name="motivation"]').value,
+          program: "Mentor Application",
+          preferredTime: "Flexible",
           preferredDate: new Date().toISOString().split('T')[0],
           ielts: {
-            status: "not_required",
+            status: "not_applicable",
             score: null
           },
           sat: {
-            status: "not_required",
+            status: "not_applicable",
             english: null,
             math: null
           },
-          age: "N/A",
+          age: "18+",
           extracurriculars: [],
           honors: [],
-          note: `Year of Study: ${this.year.value}\nTeaching Experience: ${this.experience.value}\nWeekly Availability: ${this.availability.value} hours/week`
+          additionalInfo: `Year of Study: ${this.querySelector('[name="year"]').value}\nTeaching Experience: ${this.querySelector('[name="experience"]').value}\nWeekly Availability: ${this.querySelector('[name="availability"]').value} hours/week`
         };
 
         console.log('Sending mentor application:', formData);
@@ -608,16 +608,17 @@ document.addEventListener('DOMContentLoaded', function() {
           body: JSON.stringify(formData)
         });
 
-        console.log('Response status:', response.status);
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error('Server error response:', errorData);
+          throw new Error(errorData.message || `Server error: ${response.status}`);
+        }
 
         const result = await response.json();
-
-        if (response.ok) {
-          showNotification('Спасибо за вашу заявку! Мы свяжемся с вами в ближайшее время.', 'success');
-          mentorForm.reset();
-        } else {
-          throw new Error(result.error || 'Произошла ошибка при отправке формы');
-        }
+        console.log('Success response:', result);
+        
+        showNotification('Спасибо за вашу заявку! Мы свяжемся с вами в ближайшее время.', 'success');
+        mentorForm.reset();
       } catch (error) {
         console.error('Error:', error);
         showNotification(`Произошла ошибка при отправке формы: ${error.message}`, 'error');
