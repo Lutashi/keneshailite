@@ -570,36 +570,22 @@ document.addEventListener('DOMContentLoaded', function() {
       submitButton.disabled = true;
 
       try {
-        // Format data to match consultation endpoint expectations
+        // Format data according to mentor schema
         const formData = {
           name: this.querySelector('[name="name"]').value,
           email: this.querySelector('[name="email"]').value,
           phone: this.querySelector('[name="phone"]').value,
-          location: "Kazakhstan",
+          university: this.querySelector('[name="university"]').value,
           major: this.querySelector('[name="major"]').value,
-          education: this.querySelector('[name="university"]').value,
-          goals: this.querySelector('[name="motivation"]').value,
-          program: "Mentor Application",
-          preferredTime: "Flexible",
-          preferredDate: new Date().toISOString().split('T')[0],
-          ielts: {
-            status: "not_applicable",
-            score: null
-          },
-          sat: {
-            status: "not_applicable",
-            english: null,
-            math: null
-          },
-          age: "18+",
-          extracurriculars: [],
-          honors: [],
-          additionalInfo: `Year of Study: ${this.querySelector('[name="year"]').value}\nTeaching Experience: ${this.querySelector('[name="experience"]').value}\nWeekly Availability: ${this.querySelector('[name="availability"]').value} hours/week`
+          year: this.querySelector('[name="year"]').value,
+          experience: this.querySelector('[name="experience"]').value,
+          motivation: this.querySelector('[name="motivation"]').value,
+          availability: parseInt(this.querySelector('[name="availability"]').value)
         };
 
         console.log('Sending mentor application:', formData);
 
-        const response = await fetch('https://keneshai-backend.onrender.com/api/consultation', {
+        const response = await fetch('https://keneshai-backend.onrender.com/api/mentor-application', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
