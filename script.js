@@ -570,17 +570,15 @@ document.addEventListener('DOMContentLoaded', function() {
       submitButton.disabled = true;
 
       try {
+        // Format data to match consultation endpoint expectations
         const formData = {
-          type: 'mentor-application',
           name: this.name.value,
           email: this.email.value,
           phone: this.phone.value,
-          university: this.university.value,
-          major: this.major.value,
-          year: this.year.value,
-          experience: this.experience.value,
-          motivation: this.motivation.value,
-          availability: parseInt(this.availability.value)
+          program: "MENTOR APPLICATION",  // Use this field to identify mentor applications
+          note: `University: ${this.university.value}\nMajor: ${this.major.value}\nYear: ${this.year.value}\nExperience: ${this.experience.value}\nMotivation: ${this.motivation.value}\nAvailability: ${this.availability.value} hours/week`,
+          preferredTime: "Any",  // Required field for consultation API
+          preferredDate: new Date().toISOString().split('T')[0]  // Required field for consultation API
         };
 
         const response = await fetch('https://keneshai-backend.onrender.com/api/consultation', {
