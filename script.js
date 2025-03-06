@@ -571,6 +571,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       try {
         const formData = {
+          type: 'mentor-application',
           name: this.name.value,
           email: this.email.value,
           phone: this.phone.value,
@@ -582,7 +583,7 @@ document.addEventListener('DOMContentLoaded', function() {
           availability: parseInt(this.availability.value)
         };
 
-        const response = await fetch('https://keneshai-backend.onrender.com/api/mentor-application', {
+        const response = await fetch('https://keneshai-backend.onrender.com/api/consultation', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
