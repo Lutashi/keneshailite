@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="styles3.css">
     <link rel="stylesheet" href="consultation.css">
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <div class="stars">
@@ -72,6 +73,63 @@
                             <input type="tel" id="phone" name="phone" required>
                         </div>
                         <div class="form-group">
+                            <label for="location">Откуда</label>
+                            <input type="text" id="location" name="location" placeholder="Город, Страна" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="major">Major</label>
+                            <input type="text" id="major" name="major" placeholder="Выбранная специальность" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="ielts">IELTS</label>
+                            <div class="score-input">
+                                <select id="ielts_status" name="ielts_status" required>
+                                    <option value="">Выберите статус</option>
+                                    <option value="taken">Сдавал</option>
+                                    <option value="not_taken">Не сдавал</option>
+                                </select>
+                                <input type="number" id="ielts_score" name="ielts_score" placeholder="Скор" min="0" max="9" step="0.5" style="display: none;">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="sat">SAT</label>
+                            <div class="score-input">
+                                <select id="sat_status" name="sat_status" required>
+                                    <option value="">Выберите статус</option>
+                                    <option value="taken">Сдавал</option>
+                                    <option value="not_taken">Не сдавал</option>
+                                </select>
+                                <div id="sat_scores" class="sat-scores" style="display: none;">
+                                    <div class="score-field">
+                                        <label for="sat_english">English</label>
+                                        <input type="number" id="sat_english" name="sat_english" placeholder="Скор" min="200" max="800" required>
+                                    </div>
+                                    <div class="score-field">
+                                        <label for="sat_math">Math</label>
+                                        <input type="number" id="sat_math" name="sat_math" placeholder="Скор" min="200" max="800" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="age">Возраст</label>
+                            <input type="number" id="age" name="age" min="14" max="30" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="extracurriculars_count">Количество внеклассных активностей (1-10)</label>
+                            <input type="number" id="extracurriculars_count" name="extracurriculars_count" min="1" max="10" required>
+                        </div>
+                        <div id="extracurriculars_container" class="dynamic-fields">
+                            <!-- Dynamic fields will be added here -->
+                        </div>
+                        <div class="form-group">
+                            <label for="honors_count">Количество достижений (1-5)</label>
+                            <input type="number" id="honors_count" name="honors_count" min="1" max="5" required>
+                        </div>
+                        <div id="honors_container" class="dynamic-fields">
+                            <!-- Dynamic fields will be added here -->
+                        </div>
+                        <div class="form-group">
                             <label for="education">Год в котором вы закончите школу</label>
                             <select id="education" name="education" required>
                             
@@ -130,7 +188,6 @@
         </div>
     </footer>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="script.js"></script>
 </body>
 </html> 

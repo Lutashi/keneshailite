@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keneshai Admin - Consultation Submissions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Manrope', sans-serif;
+            background: #1a1a2e;
+            color: #E0E0E0;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #D4AF37;
+            margin-bottom: 30px;
+            border-bottom: 2px solid rgba(212, 175, 55, 0.3);
+            padding-bottom: 10px;
+        }
+        .submissions {
+            display: grid;
+            gap: 20px;
+        }
+        .submission-card {
+            background: rgba(26, 26, 46, 0.5);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .submission-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        .submission-date {
+            color: #D4AF37;
+            font-size: 0.9rem;
+        }
+        .field-group {
+            margin-bottom: 15px;
+        }
+        .field-label {
+            font-weight: 500;
+            color: #D4AF37;
+            margin-bottom: 5px;
+        }
+        .field-value {
+            color: #E0E0E0;
+        }
+        .section-title {
+            font-weight: 600;
+            color: #D4AF37;
+            margin: 20px 0 10px;
+        }
+        .activity-card, .honor-card {
+            background: rgba(26, 26, 46, 0.3);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .no-submissions {
+            text-align: center;
+            padding: 50px;
+            color: #888;
+        }
+        .export-btn {
+            background: #D4AF37;
+            color: #1a1a2e;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Manrope', sans-serif;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+        .export-btn:hover {
+            background: #c4a030;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Консультационные заявки</h1>
+        <button class="export-btn" onclick="exportToCSV()">Экспорт в CSV</button>
+        <div id="submissions" class="submissions">
+            <div class="no-submissions">Loading submissions...</div>
+        </div>
+    </div>
+
+    <script>
+        async function fetchSubmissions() {
+            try {
+                const response = await fetch('http://localhost:3000/api/submissions');
+                const submissions = await response.json();
+                displaySubmissions(submissions);
+            } catch (error) {
+                console.error('Error fetching submissions:', error);
+                document.getElementById('submissions').innerHTML = '<div class="no-submissions">Error loading submissions</div>';
+            }
+        }
+
+        function displaySubmissions(submissions) {
+            const container = document.getElementById('submissions');
+            if (!submissions.length) {
+                container.innerHTML = '<div class="no-submissions">No submissions yet</div>';
+                return;
+            }
+
+            container.innerHTML = submissions.map(submission => `
+                <div class="submission-card">
+                    <div class="submission-header">
+                        <h3>${submission.name}</h3>
+                        <span class="submission-date">${new Date(submission.submissionDate).toLocaleString()}</span>
+                    </div>
+                    
+                    <div class="field-group">
+                        <div class="field-label">Email:</div>
+                        <div class="field-value">${submission.email}</div>
+                    </div>
+                    
+                    <div class="field-group">
+                        <div class="field-label">Phone:</div>
+                        <div class="field-value">${submission.phone}</div>
+                    </div>
+                    
+                    <div class="field-group">
+                        <div class="field-label">Location:</div>
+                        <div class="field-value">${submission.location}</div>
+                    </div>
+                    
+                    <div class="field-group">
+                        <div class="field-label">Major:</div>
+                        <div class="field-value">${submission.major}</div>
+                    </div>
+                    
+                    <div class="field-group">
+                        <div class="field-label">Age:</div>
+                        <div class="field-value">${submission.age}</div>
+                    </div>
+                    
+                    <div class="field-group">
+                        <div class="field-label">IELTS:</div>
+                        <div class="field-value">
+                            Status: ${submission.ielts.status}
+                            ${submission.ielts.score ? `<br>Score: ${submission.ielts.score}` : ''}
+                        </div>
+                    </div>
+                    
+                    <div class="field-group">
+                        <div class="field-label">SAT:</div>
+                        <div class="field-value">
+                            Status: ${submission.sat.status}
+                            ${submission.sat.english ? `<br>English: ${submission.sat.english}` : ''}
+                            ${submission.sat.math ? `<br>Math: ${submission.sat.math}` : ''}
+                        </div>
+                    </div>
+
+                    ${submission.extracurriculars.length ? `
+                        <div class="section-title">Extracurricular Activities</div>
+                        ${submission.extracurriculars.map((activity, index) => `
+                            <div class="activity-card">
+                                <div class="field-label">Activity ${index + 1}:</div>
+                                <div class="field-value">${activity.activity}</div>
+                                <div class="field-value">${activity.description}</div>
+                            </div>
+                        `).join('')}
+                    ` : ''}
+
+                    ${submission.honors.length ? `
+                        <div class="section-title">Honors</div>
+                        ${submission.honors.map((honor, index) => `
+                            <div class="honor-card">
+                                <div class="field-label">Honor ${index + 1}:</div>
+                                <div class="field-value">${honor.title}</div>
+                                <div class="field-value">${honor.description}</div>
+                            </div>
+                        `).join('')}
+                    ` : ''}
+                    
+                    <div class="field-group">
+                        <div class="field-label">Education:</div>
+                        <div class="field-value">${submission.education}</div>
+                    </div>
+                    
+                    <div class="field-group">
+                        <div class="field-label">Goals:</div>
+                        <div class="field-value">${submission.goals}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function exportToCSV() {
+            fetch('http://localhost:3000/api/export')
+                .then(response => response.blob())
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'consultations.csv';
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                })
+                .catch(error => console.error('Error exporting data:', error));
+        }
+
+        // Load submissions when page loads
+        fetchSubmissions();
+    </script>
+</body>
+</html> 

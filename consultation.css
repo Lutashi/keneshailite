@@ -1,4 +1,4 @@
- /* Consultation Page Styles */
+/* Consultation Page Styles */
 .consultation-page {
     padding: 120px 0 80px;
     min-height: 100vh;
@@ -91,6 +91,7 @@
     margin-bottom: 8px;
     font-size: 1rem;
     font-weight: 500;
+    font-family: 'Manrope', sans-serif;
 }
 
 .form-group input,
@@ -103,6 +104,7 @@
     border-radius: 8px;
     color: #E0E0E0;
     font-size: 1rem;
+    font-family: 'Manrope', sans-serif;
     transition: all 0.3s ease;
 }
 
@@ -251,4 +253,156 @@
     to {
         transform: rotate(360deg);
     }
+}
+
+.score-input {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.score-input select {
+    width: 100%;
+}
+
+/* Dynamic Fields Animation */
+.dynamic-fields {
+    margin: 20px 0;
+    padding: 15px;
+    background: rgba(26, 26, 46, 0.5);
+    border-radius: 10px;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    max-height: 500px;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+.dynamic-fields.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.dynamic-fields .form-group {
+    margin-bottom: 15px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    background: rgba(26, 26, 46, 0.3);
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(212, 175, 55, 0.1);
+    box-sizing: border-box;
+}
+
+.dynamic-fields .form-group.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.dynamic-fields .form-group:last-child {
+    margin-bottom: 0;
+}
+
+.dynamic-fields label {
+    display: block;
+    color: #E0E0E0;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    font-family: 'Manrope', sans-serif;
+}
+
+.dynamic-fields input[type="text"],
+.dynamic-fields textarea {
+    width: calc(100% - 24px);
+    padding: 8px 12px;
+    background: rgba(26, 26, 46, 0.8);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 5px;
+    color: #E0E0E0;
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.9rem;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+.dynamic-fields textarea {
+    margin-top: 8px;
+    min-height: 80px;
+    resize: vertical;
+    max-height: 200px;
+    width: calc(100% - 24px);
+}
+
+.dynamic-fields input[type="text"]:focus,
+.dynamic-fields textarea:focus {
+    outline: none;
+    border-color: #D4AF37;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+}
+
+/* Style for the count inputs */
+input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    background: rgba(26, 26, 46, 0.8);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 5px;
+    color: #E0E0E0;
+    font-family: 'Manrope', sans-serif;
+}
+
+input[type="number"]:focus {
+    border-color: #D4AF37;
+    outline: none;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+}
+
+/* Remove emoji-specific styles */
+label[for^="location"],
+label[for^="major"],
+label[for^="age"] {
+    font-size: 1rem;
+    color: #E0E0E0;
+    margin-bottom: 8px;
+    display: block;
+    font-family: 'Manrope', sans-serif;
+}
+
+.sat-scores {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.sat-scores .score-field {
+    flex: 1;
+}
+
+.sat-scores .score-field label {
+    display: block;
+    color: #E0E0E0;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+.sat-scores .score-field input {
+    width: 100%;
+    padding: 8px 12px;
+    background: rgba(26, 26, 46, 0.8);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 5px;
+    color: #E0E0E0;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.sat-scores .score-field input:focus {
+    border-color: #D4AF37;
+    outline: none;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
 }

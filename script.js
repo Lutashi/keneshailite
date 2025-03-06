@@ -312,21 +312,149 @@ document.addEventListener('DOMContentLoaded', function() {
       e.preventDefault();
       
       const submitBtn = this.querySelector('.submit-btn');
-      submitBtn.classList.add('loading');
       submitBtn.disabled = true;
+      submitBtn.textContent = 'Отправка...';
       
-      // Simulate form submission (replace with actual API call)
       try {
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        // Get form data
+        const formData = {
+          name: document.getElementById('name').value,
+          email: document.getElementById('email').value,
+          phone: document.getElementById('phone').value,
+          location: document.getElementById('location').value,
+          major: document.getElementById('major').value,
+          ielts: {
+            status: document.getElementById('ielts_status').value,
+            score: document.getElementById('ielts_score').value
+          },
+          sat: {
+            status: document.getElementById('sat_status').value,
+            english: document.getElementById('sat_english').value,
+            math: document.getElementById('sat_math').value
+          },
+          age: document.getElementById('age').value,
+          extracurriculars: [],
+          honors: [],
+          education: document.getElementById('education').value,
+          goals: document.getElementById('goals').value
+        };
+
+        // Get extracurricular activities
+        const extracurricularsContainer = document.getElementById('extracurriculars_container');
+        const extracurricularInputs = extracurricularsContainer.querySelectorAll('input[type="text"]');
+        const extracurricularTextareas = extracurricularsContainer.querySelectorAll('textarea');
         
-        // Show success message
-        showNotification('Спасибо! Мы свяжемся с вами в ближайшее время.', 'success');
-        consultationForm.reset();
+        for (let i = 0; i < extracurricularInputs.length; i++) {
+          formData.extracurriculars.push({
+            activity: extracurricularInputs[i].value,
+            description: extracurricularTextareas[i].value
+          });
+        }
+
+        // Get honors
+        const honorsContainer = document.getElementById('honors_container');
+        const honorsInputs = honorsContainer.querySelectorAll('input[type="text"]');
+        const honorsTextareas = honorsContainer.querySelectorAll('textarea');
+        
+        for (let i = 0; i < honorsInputs.length; i++) {
+          formData.honors.push({
+            title: honorsInputs[i].value,
+            description: honorsTextareas[i].value
+          });
+        }
+
+        const response = await fetch('http://localhost:3000/api/consultation', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        });
+
+        if (response.ok) {
+          alert('Спасибо за вашу заявку! Мы свяжемся с вами в ближайшее время.');
+          consultationForm.reset();
+          
+          // Clear dynamic fields
+          document.getElementById('extracurriculars_container').innerHTML = '';
+          document.getElementById('honors_container').innerHTML = '';
+        } else {
+          throw new Error('Error submitting form');
+        }
       } catch (error) {
-        showNotification('Произошла ошибка. Пожалуйста, попробуйте позже.', 'error');
+        console.error('Error:', error);
+        alert('Произошла ошибка при отправке формы. Пожалуйста, попробуйте позже.');
       } finally {
-        submitBtn.classList.remove('loading');
         submitBtn.disabled = false;
+        submitBtn.textContent = 'Записаться на консультацию';
+      }
+    });
+  }
+
+  // Show/hide IELTS score input
+  const ieltsStatus = document.getElementById('ielts_status');
+  const ieltsScore = document.getElementById('ielts_score');
+  
+  if (ieltsStatus) {
+    ieltsStatus.addEventListener('change', function() {
+      ieltsScore.style.display = this.value === 'taken' ? 'block' : 'none';
+    });
+  }
+
+  // Show/hide SAT scores
+  const satStatus = document.getElementById('sat_status');
+  const satScores = document.getElementById('sat_scores');
+  
+  if (satStatus) {
+    satStatus.addEventListener('change', function() {
+      satScores.style.display = this.value === 'taken' ? 'flex' : 'none';
+    });
+  }
+
+  // Handle dynamic fields for extracurriculars
+  const extracurricularsCount = document.getElementById('extracurriculars_count');
+  if (extracurricularsCount) {
+    extracurricularsCount.addEventListener('change', function() {
+      const container = document.getElementById('extracurriculars_container');
+      container.innerHTML = '';
+      container.classList.add('visible');
+
+      for (let i = 0; i < this.value; i++) {
+        const formGroup = document.createElement('div');
+        formGroup.className = 'form-group';
+        
+        formGroup.innerHTML = `
+          <label>Внеклассная активность ${i + 1}</label>
+          <input type="text" name="extracurricular_${i + 1}" required>
+          <textarea name="extracurricular_desc_${i + 1}" placeholder="Описание" required></textarea>
+        `;
+        
+        container.appendChild(formGroup);
+        setTimeout(() => formGroup.classList.add('visible'), 100 * i);
+      }
+    });
+  }
+
+  // Handle dynamic fields for honors
+  const honorsCount = document.getElementById('honors_count');
+  if (honorsCount) {
+    honorsCount.addEventListener('change', function() {
+      const container = document.getElementById('honors_container');
+      container.innerHTML = '';
+      container.classList.add('visible');
+
+      for (let i = 0; i < this.value; i++) {
+        const formGroup = document.createElement('div');
+        formGroup.className = 'form-group';
+        
+        formGroup.innerHTML = `
+          <label>Достижение ${i + 1}</label>
+          <input type="text" name="honor_${i + 1}" required>
+          <textarea name="honor_desc_${i + 1}" placeholder="Описание" required></textarea>
+        `;
+        
+        container.appendChild(formGroup);
+        setTimeout(() => formGroup.classList.add('visible'), 100 * i);
       }
     });
   }
