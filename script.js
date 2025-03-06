@@ -582,7 +582,7 @@ document.addEventListener('DOMContentLoaded', function() {
           availability: parseInt(this.availability.value)
         };
 
-        const response = await fetch('http://localhost:3000/api/mentor-application', {
+        const response = await fetch('https://keneshai-backend.onrender.com/api/mentor-application', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -593,14 +593,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const result = await response.json();
 
         if (response.ok) {
-          alert('Спасибо за вашу заявку! Мы свяжемся с вами в ближайшее время.');
+          showNotification('Спасибо за вашу заявку! Мы свяжемся с вами в ближайшее время.', 'success');
           mentorForm.reset();
         } else {
           throw new Error(result.error || 'Произошла ошибка при отправке формы');
         }
       } catch (error) {
         console.error('Error:', error);
-        alert('Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз позже.');
+        showNotification(`Произошла ошибка при отправке формы: ${error.message}`, 'error');
       } finally {
         // Restore button state
         submitButton.textContent = originalButtonText;
