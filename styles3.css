@@ -16,6 +16,7 @@ body {
     color: #FFFFFF;
     line-height: 1.6;
     overflow-x: hidden;
+    padding-top: 100px; /* Reduced from 150px */
 }
 
 .container {
@@ -618,6 +619,9 @@ section h2::after {
     backdrop-filter: blur(10px);
     max-width: 90%;
     width: auto;
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
 .cta-banner p {
@@ -636,6 +640,33 @@ section h2::after {
 .cta-banner a:hover {
     color: #FFA500;
     text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+.cta-banner .close-btn {
+    color: #FFD700;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 5px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    margin-left: 10px;
+}
+
+.cta-banner .close-btn:hover {
+    color: #FFA500;
+    transform: rotate(90deg);
+}
+
+.cta-banner.hidden {
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-50%, 20px);
+    transition: all 0.3s ease;
 }
 
 /* Enhanced Section Styling */
@@ -813,11 +844,6 @@ section.visible {
 
 .main-nav ul li a:hover {
     color: #FFD700;
-}
-
-/* Ensure main content doesn't hide behind the fixed header */
-body {
-    padding-top: 150px; /* Adjust this value based on your header's height */
 }
 
 /* Reviews Section */
@@ -1264,4 +1290,56 @@ body {
 .founder-signature p:last-child {
     color: #D4AF37;
     font-weight: 500;
+}
+
+.mentor-cta {
+    text-align: center;
+    margin-top: 60px;
+    padding: 40px;
+    position: relative;
+}
+
+.mentor-cta p {
+    color: #FFD700;
+    font-size: 1.4rem;
+    margin-bottom: 25px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+}
+
+.mentor-cta .cta-button {
+    display: inline-block;
+    padding: 16px 40px;
+    background: linear-gradient(45deg, #D4AF37, #FFD700);
+    color: #1A1A2E;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+    letter-spacing: 0.5px;
+}
+
+.mentor-cta .cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+    background: linear-gradient(45deg, #FFD700, #D4AF37);
+}
+
+@media (max-width: 768px) {
+    .mentor-cta {
+        margin: 40px 20px;
+        padding: 30px;
+    }
+
+    .mentor-cta p {
+        font-size: 1.2rem;
+    }
+
+    .mentor-cta .cta-button {
+        padding: 14px 32px;
+        font-size: 1.1rem;
+    }
 }

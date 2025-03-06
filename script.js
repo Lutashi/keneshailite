@@ -508,6 +508,116 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   }
+
+  // Super simple hamburger menu
+  const hamburger = document.querySelector('.hamburger');
+  const nav = document.querySelector('.main-nav');
+  
+  if (hamburger && nav) {
+    hamburger.addEventListener('click', function(e) {
+      e.stopPropagation(); // Prevent the document click from immediately closing it
+      this.classList.toggle('active');
+      nav.classList.toggle('active');
+    });
+    
+    // Close when clicking a link
+    const links = nav.querySelectorAll('a');
+    links.forEach(link => {
+      link.addEventListener('click', function() {
+        hamburger.classList.remove('active');
+        nav.classList.remove('active');
+      });
+    });
+    
+    // Close when clicking outside
+    document.addEventListener('click', function(e) {
+      if (nav.classList.contains('active') && 
+          !nav.contains(e.target) && 
+          !hamburger.contains(e.target)) {
+        hamburger.classList.remove('active');
+        nav.classList.remove('active');
+      }
+    });
+  }
+
+  // Handle iOS touch events
+  if (nav) {
+    nav.addEventListener('touchstart', function(e) {
+      if (e.target.tagName !== 'A') {
+        e.preventDefault();
+      }
+    }, { passive: false });
+  }
+
+  // Close menu on orientation change
+  window.addEventListener('orientationchange', function() {
+    if (nav && nav.classList.contains('active')) {
+      hamburger.classList.remove('active');
+      nav.classList.remove('active');
+    }
+  });
+
+  // Mentor Application Form Handler
+  const mentorForm = document.getElementById('mentorForm');
+  if (mentorForm) {
+    mentorForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      // Show loading state
+      const submitButton = this.querySelector('button[type="submit"]');
+      const originalButtonText = submitButton.textContent;
+      submitButton.textContent = 'Отправка...';
+      submitButton.disabled = true;
+
+      try {
+        const formData = {
+          name: this.name.value,
+          email: this.email.value,
+          phone: this.phone.value,
+          university: this.university.value,
+          major: this.major.value,
+          year: this.year.value,
+          experience: this.experience.value,
+          motivation: this.motivation.value,
+          availability: parseInt(this.availability.value)
+        };
+
+        const response = await fetch('http://localhost:3000/api/mentor-application', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          alert('Спасибо за вашу заявку! Мы свяжемся с вами в ближайшее время.');
+          mentorForm.reset();
+        } else {
+          throw new Error(result.error || 'Произошла ошибка при отправке формы');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз позже.');
+      } finally {
+        // Restore button state
+        submitButton.textContent = originalButtonText;
+        submitButton.disabled = false;
+      }
+    });
+  }
+
+  // CTA Banner Close Functionality
+  const ctaBanner = document.querySelector('.cta-banner');
+  const closeBtn = document.querySelector('.cta-banner .close-btn');
+
+  if (ctaBanner && closeBtn) {
+    closeBtn.addEventListener('click', function() {
+      ctaBanner.classList.add('hidden');
+    });
+  }
 });
 
 // Notification System

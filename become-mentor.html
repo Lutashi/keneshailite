@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Стать Ментором - Keneshai</title>
+    <link rel="stylesheet" href="styles3.css">
+    <link rel="stylesheet" href="consultation.css">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="stars">
+        <div class="star-layer-1"></div>
+        <div class="star-layer-2"></div>
+        <div class="star-layer-3"></div>
+    </div>
+
+    <header class="site-header">
+        <div class="container">
+            <div class="logo">
+                <svg viewBox="0 0 100 100" width="80" height="80">
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="#FFD700" stroke-width="2" />
+                    <circle cx="50" cy="50" r="5" fill="#FFD700" />
+                    <ellipse cx="50" cy="50" rx="25" ry="10" fill="none" stroke="#FFD700" stroke-width="2" transform="rotate(30 50 50)" />
+                    <ellipse cx="50" cy="50" rx="25" ry="10" fill="none" stroke="#FFD700" stroke-width="2" transform="rotate(-30 50 50)" />
+                </svg>
+            </div>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="about.html">О нас</a></li>
+                    <li><a href="index.html#mentors">Менторы</a></li>
+                    <li><a href="index.html#reviews">Отзывы</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="consultation-page">
+        <div class="container">
+            <div class="consultation-content">
+                <div class="consultation-info">
+                    <h1>Стать Ментором</h1>
+                    <p class="subtitle">Помогите другим достичь их образовательных целей</p>
+                    <div class="benefits">
+                        <div class="benefit-item">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>Делитесь своим опытом</span>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="fas fa-users"></i>
+                            <span>Станьте частью сообщества</span>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Развивайте свои навыки</span>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="fas fa-hand-holding-heart"></i>
+                            <span>Помогайте другим расти</span>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="fas fa-star"></i>
+                            <span>Получайте вознаграждение</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="consultation-form">
+                    <form id="mentorForm">
+                        <div class="form-group">
+                            <label for="name">Ваше имя</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Номер WhatsApp с кодом страны</label>
+                            <input type="tel" id="phone" name="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="university">Университеты в которые вы поступили</label>
+                            <input type="text" id="university" name="university" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="major">Специальность</label>
+                            <input type="text" id="major" name="major" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="year">Год обучения</label>
+                            <select id="year" name="year" required>
+                                <option value="">Выберите год обучения</option>
+                                <option value="0">Пока что еще не обучаюсь</option>
+                                <option value="1">1 курс</option>
+                                <option value="2">2 курс</option>
+                                <option value="3">3 курс</option>
+                                <option value="4">4 курс</option>
+                                <option value="graduate">Выпускник</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="experience">Опыт менторства</label>
+                            <textarea id="experience" name="experience" rows="4" placeholder="Расскажите о вашем опыте менторства или преподавания (если есть)" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="motivation">Почему вы хотите стать ментором?</label>
+                            <textarea id="motivation" name="motivation" rows="4" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="availability">Доступное время для менторства (часов в неделю)</label>
+                            <input type="number" id="availability" name="availability" min="1" max="40" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="agreement" required>
+                                <span>Я согласен с обработкой персональных данных</span>
+                            </label>
+                        </div>
+                        <button type="submit" class="submit-btn">Отправить заявку</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="social-links">
+                    <a href="https://www.tiktok.com/@moonking.mp4" target="_blank" class="social-link">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                    <a href="https://t.me/aikhanunitips" target="_blank" class="social-link">
+                        <i class="fab fa-telegram"></i>
+                    </a>
+                    <a href="https://instagram.com/keneshai" target="_blank" class="social-link">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Keneshai. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html> 

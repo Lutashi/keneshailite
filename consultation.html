@@ -18,6 +18,19 @@
 
     <header class="site-header">
         <div class="container">
+            <div class="logo">
+                <svg viewBox="0 0 100 100" width="80" height="80">
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="#FFD700" stroke-width="2" />
+                    <circle cx="50" cy="50" r="5" fill="#FFD700" />
+                    <ellipse cx="50" cy="50" rx="25" ry="10" fill="none" stroke="#FFD700" stroke-width="2" transform="rotate(30 50 50)" />
+                    <ellipse cx="50" cy="50" rx="25" ry="10" fill="none" stroke="#FFD700" stroke-width="2" transform="rotate(-30 50 50)" />
+                </svg>
+            </div>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
             <nav class="main-nav">
                 <ul>
                     <li><a href="index.html">Главная</a></li>
@@ -69,7 +82,7 @@
                             <input type="email" id="email" name="email" required>
                         </div>
                         <div class="form-group">
-                            <label for="phone">Телефон</label>
+                            <label for="phone">Номер WhatsApp с кодом страны</label>
                             <input type="tel" id="phone" name="phone" required>
                         </div>
                         <div class="form-group">
@@ -116,14 +129,14 @@
                             <input type="number" id="age" name="age" min="14" max="30" required>
                         </div>
                         <div class="form-group">
-                            <label for="extracurriculars_count">Количество внеклассных активностей (1-10)</label>
+                            <label for="extracurriculars_count">Количество внеклассных активностей (extracurriculars) (1-10)</label>
                             <input type="number" id="extracurriculars_count" name="extracurriculars_count" min="1" max="10" required>
                         </div>
                         <div id="extracurriculars_container" class="dynamic-fields">
                             <!-- Dynamic fields will be added here -->
                         </div>
                         <div class="form-group">
-                            <label for="honors_count">Количество достижений (1-5)</label>
+                            <label for="honors_count">Количество достижений (honors) (1-5)</label>
                             <input type="number" id="honors_count" name="honors_count" min="1" max="5" required>
                         </div>
                         <div id="honors_container" class="dynamic-fields">
@@ -158,34 +171,24 @@
     </main>
 
     <footer class="site-footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>Keneshai</h3>
-                    <p>Ваш путь к звездам начинается здесь</p>
-                </div>
-                <div class="footer-section">
-                    <h3>Социальные сети</h3>
-                    <div class="social-links">
-                        <a href="https://tiktok.com/@keneshai" target="_blank" class="social-link">
-                            <i class="fab fa-tiktok"></i>
-                            <span>TikTok</span>
-                        </a>
-                        <a href="https://t.me/keneshai" target="_blank" class="social-link">
-                            <i class="fab fa-telegram"></i>
-                            <span>Telegram</span>
-                        </a>
-                        <a href="https://instagram.com/keneshai" target="_blank" class="social-link">
-                            <i class="fab fa-instagram"></i>
-                            <span>Instagram</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 Keneshai. Все права защищены.</p>
-            </div>
+      <div class="container">
+        <div class="footer-content">
+          <div class="social-links">
+            <a href="https://www.tiktok.com/@moonking.mp4" target="_blank" class="social-link">
+              <i class="fab fa-tiktok"></i>
+            </a>
+            <a href="https://t.me/aikhanunitips" target="_blank" class="social-link">
+              <i class="fab fa-telegram"></i>
+            </a>
+            <a href="https://instagram.com/keneshai" target="_blank" class="social-link">
+              <i class="fab fa-instagram"></i>
+            </a>
+          </div>
         </div>
+        <div class="footer-bottom">
+          <p>&copy; 2025 Keneshai. Все права защищены.</p>
+        </div>
+      </div>
     </footer>
 
     <script src="script.js"></script>
