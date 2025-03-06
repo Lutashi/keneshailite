@@ -401,20 +401,20 @@ document.addEventListener('DOMContentLoaded', function() {
         if (response.ok) {
           const responseData = await response.json();
           console.log('Success response:', responseData);
-          alert('Спасибо за вашу заявку! Мы свяжемся с вами в ближайшее время.');
+          showNotification('Спасибо за вашу заявку! Мы свяжемся с вами в ближайшее время.', 'success');
           consultationForm.reset();
           
           // Clear dynamic fields
           if (extracurricularsContainer) extracurricularsContainer.innerHTML = '';
           if (honorsContainer) honorsContainer.innerHTML = '';
         } else {
-          const errorData = await response.text();
+          const errorData = await response.json();
           console.error('Server error response:', errorData);
-          throw new Error(`Server error: ${response.status}`);
+          throw new Error(errorData.details || `Server error: ${response.status}`);
         }
       } catch (error) {
         console.error('Submission error:', error);
-        alert('Произошла ошибка при отправке формы. Пожалуйста, попробуйте позже.');
+        showNotification(`Произошла ошибка при отправке формы: ${error.message}`, 'error');
       } finally {
         if (submitBtn) {
           submitBtn.disabled = false;
@@ -437,10 +437,23 @@ document.addEventListener('DOMContentLoaded', function() {
   // Show/hide SAT scores
   const satStatus = document.getElementById('sat_status');
   const satScores = document.getElementById('sat_scores');
+  const satEnglish = document.getElementById('sat_english');
+  const satMath = document.getElementById('sat_math');
   
-  if (satStatus && satScores) {
+  if (satStatus && satScores && satEnglish && satMath) {
     satStatus.addEventListener('change', function() {
-      satScores.style.display = this.value === 'taken' ? 'flex' : 'none';
+      const isTaken = this.value === 'taken';
+      satScores.style.display = isTaken ? 'flex' : 'none';
+      
+      // Toggle required attribute based on SAT status
+      satEnglish.required = isTaken;
+      satMath.required = isTaken;
+      
+      // Clear values when not taken
+      if (!isTaken) {
+        satEnglish.value = '';
+        satMath.value = '';
+      }
     });
   }
 

@@ -15,13 +15,48 @@ app.use(cors({
 app.use(express.json());
 app.use(express.static('public'));
 
-// MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/keneshai', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-.then(() => console.log('Connected to MongoDB'))
-.catch(err => console.error('MongoDB connection error:', err));
+// MongoDB Connection with better error handling
+const connectDB = async () => {
+    try {
+        const conn = await mongoose.connect('mongodb+srv://ajumashukurov:55551919a@cluster0.re6au.mongodb.net/keneshai?retryWrites=true&w=majority&appName=Cluster0', {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            serverSelectionTimeoutMS: 30000, // Increase timeout to 30 seconds
+            socketTimeoutMS: 45000, // Increase socket timeout
+            connectTimeoutMS: 30000, // Connection timeout
+            keepAlive: true,
+            keepAliveInitialDelay: 300000
+        });
+        console.log(`MongoDB Connected: ${conn.connection.host}`);
+
+        // Handle connection events
+        mongoose.connection.on('error', err => {
+            console.error('MongoDB connection error:', err);
+        });
+
+        mongoose.connection.on('disconnected', () => {
+            console.log('MongoDB disconnected');
+        });
+
+        mongoose.connection.on('connected', () => {
+            console.log('MongoDB connected');
+        });
+
+    } catch (error) {
+        console.error('MongoDB connection error:', error);
+        // Don't exit the process, just log the error
+        console.error('Retrying connection...');
+    }
+};
+
+// Initial connection
+connectDB();
+
+// Reconnection handling
+mongoose.connection.on('disconnected', () => {
+    console.log('MongoDB disconnected. Attempting to reconnect...');
+    setTimeout(connectDB, 5000); // Try to reconnect after 5 seconds
+});
 
 // Consultation Schema
 const consultationSchema = new mongoose.Schema({
@@ -61,12 +96,26 @@ const Consultation = mongoose.model('Consultation', consultationSchema);
 // Routes
 app.post('/api/consultation', async (req, res) => {
     try {
+        console.log('Received consultation submission:', req.body);
+        
+        // Validate required fields
+        const requiredFields = ['name', 'email', 'phone', 'location', 'major', 'age', 'education', 'goals'];
+        for (const field of requiredFields) {
+            if (!req.body[field]) {
+                throw new Error(`Missing required field: ${field}`);
+            }
+        }
+        
         const consultation = new Consultation(req.body);
         await consultation.save();
+        console.log('Consultation saved successfully:', consultation);
         res.status(201).json({ message: 'Consultation submitted successfully' });
     } catch (error) {
         console.error('Error saving consultation:', error);
-        res.status(500).json({ error: 'Error submitting consultation' });
+        res.status(500).json({ 
+            error: 'Error submitting consultation',
+            details: error.message 
+        });
     }
 });
 
