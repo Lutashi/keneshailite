@@ -93,25 +93,6 @@ const consultationSchema = new mongoose.Schema({
 
 const Consultation = mongoose.model('Consultation', consultationSchema);
 
-// Mentor Application Schema
-const mentorSchema = new mongoose.Schema({
-    name: String,
-    email: String,
-    phone: String,
-    university: String,
-    major: String,
-    year: String,
-    experience: String,
-    motivation: String,
-    availability: Number,
-    submissionDate: {
-        type: Date,
-        default: Date.now
-    }
-});
-
-const MentorApplication = mongoose.model('MentorApplication', mentorSchema);
-
 // Routes
 app.post('/api/consultation', async (req, res) => {
     try {
@@ -182,59 +163,6 @@ app.get('/api/export', async (req, res) => {
     } catch (error) {
         console.error('Error exporting data:', error);
         res.status(500).json({ error: 'Error exporting data' });
-    }
-});
-
-// Mentor application route
-app.post('/api/mentor-application', async (req, res) => {
-    try {
-        console.log('Received mentor application:', req.body);
-        
-        // Validate required fields
-        const requiredFields = ['name', 'email', 'phone', 'university', 'major', 'year', 'experience', 'motivation', 'availability'];
-        for (const field of requiredFields) {
-            if (!req.body[field]) {
-                throw new Error(`Missing required field: ${field}`);
-            }
-        }
-        
-        const application = new MentorApplication(req.body);
-        await application.save();
-        console.log('Mentor application saved successfully:', application);
-        res.status(201).json({ message: 'Mentor application submitted successfully' });
-    } catch (error) {
-        console.error('Error saving mentor application:', error);
-        res.status(500).json({ 
-            error: 'Error submitting mentor application',
-            details: error.message 
-        });
-    }
-});
-
-// Get all mentor applications
-app.get('/api/mentor-applications', async (req, res) => {
-    try {
-        const applications = await MentorApplication.find().sort({ submissionDate: -1 });
-        res.json(applications);
-    } catch (error) {
-        console.error('Error fetching mentor applications:', error);
-        res.status(500).json({ error: 'Error fetching mentor applications' });
-    }
-});
-
-// Export mentor applications to CSV
-app.get('/api/export-mentor-applications', async (req, res) => {
-    try {
-        const applications = await MentorApplication.find().sort({ submissionDate: -1 });
-        
-        const csv = json2csv(applications);
-        
-        res.setHeader('Content-Type', 'text/csv');
-        res.setHeader('Content-Disposition', 'attachment; filename=mentor-applications.csv');
-        res.send(csv);
-    } catch (error) {
-        console.error('Error exporting mentor applications:', error);
-        res.status(500).json({ error: 'Error exporting mentor applications' });
     }
 });
 

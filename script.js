@@ -584,6 +584,13 @@ document.addEventListener('DOMContentLoaded', function() {
         };
 
         console.log('Sending mentor application:', formData);
+        
+        // Show loading notification
+        showNotification('Отправка заявки... Пожалуйста, подождите.', 'info');
+
+        // Set up timeout
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
 
         const response = await fetch('https://keneshai-backend.onrender.com/api/mentor-application', {
           method: 'POST',
@@ -591,9 +598,11 @@ document.addEventListener('DOMContentLoaded', function() {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
           },
-          body: JSON.stringify(formData)
+          body: JSON.stringify(formData),
+          signal: controller.signal
         });
 
+        clearTimeout(timeoutId);
         console.log('Response status:', response.status);
 
         if (!response.ok) {
@@ -609,7 +618,11 @@ document.addEventListener('DOMContentLoaded', function() {
         mentorForm.reset();
       } catch (error) {
         console.error('Error:', error);
-        showNotification(`Произошла ошибка при отправке формы: ${error.message}`, 'error');
+        if (error.name === 'AbortError') {
+          showNotification('Сервер не отвечает. Пожалуйста, попробуйте позже.', 'error');
+        } else {
+          showNotification(`Произошла ошибка при отправке формы: ${error.message}`, 'error');
+        }
       } finally {
         // Restore button state
         submitButton.textContent = originalButtonText;
@@ -679,6 +692,10 @@ style.textContent = `
   
   .notification.error {
     border-left: 4px solid #f44336;
+  }
+
+  .notification.info {
+    border-left: 4px solid #2196F3;
   }
 `;
 document.head.appendChild(style);
