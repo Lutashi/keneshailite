@@ -1,11 +1,13 @@
-// Remove preloader on window load
-// Preloader
+// Core UI functionality
 window.addEventListener("load", () => {
+  // Remove preloader
   const preloader = document.querySelector(".preloader");
-  preloader.style.opacity = "0";
-  setTimeout(() => {
-    preloader.style.display = "none";
-  }, 500);
+  if (preloader) {
+    preloader.style.opacity = "0";
+    setTimeout(() => {
+      preloader.style.display = "none";
+    }, 500);
+  }
 
   // Scroll animations for sections
   const sections = document.querySelectorAll("section");
@@ -100,60 +102,26 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   /*** Smooth Scroll for CTA Button ***/
-  const ctaButton = document.querySelector(".cta-button");
-  if (ctaButton) {
-    ctaButton.addEventListener("click", function (e) {
-      e.preventDefault();
-      const targetSection = document.querySelector("#consultation");
-      if (targetSection) {
-        targetSection.scrollIntoView({ behavior: "smooth" });
-      }
-    });
-  }
-
-  /*** Counters Animation ***/
-  const counters = document.querySelectorAll(".stat h3");
-  if (counters.length > 0) {
-    const speed = 200;
-    counters.forEach((counter) => {
-      const updateCount = () => {
-        const target = +counter.getAttribute("data-count");
-        const count = +counter.innerText;
-        const increment = target / speed;
-
-        if (count < target) {
-          counter.innerText = Math.ceil(count + increment);
-          setTimeout(updateCount, 10);
-        } else {
-          counter.innerText = target;
-        }
-      };
-      updateCount();
-    });
-  }
-
-  /*** FAQ Toggle ***/
-  const faqQuestions = document.querySelectorAll(".faq-question");
-  if (faqQuestions.length > 0) {
-    faqQuestions.forEach((question) => {
-      question.addEventListener("click", () => {
-        const answer = question.nextElementSibling;
-        if (answer) {
-          const isActive = answer.classList.contains("active");
-          document.querySelectorAll(".faq-answer").forEach((item) => {
-            item.classList.remove("active");
-          });
-          if (!isActive) {
-            answer.classList.add("active");
+  document.querySelectorAll('.cta-button').forEach(button => {
+    if (button && !button.getAttribute('target')) {
+      button.addEventListener("click", function (e) {
+        e.preventDefault();
+        const href = this.getAttribute('href');
+        if (href && href.startsWith('#')) {
+          const targetSection = document.querySelector(href);
+          if (targetSection) {
+            targetSection.scrollIntoView({ behavior: "smooth" });
           }
         }
       });
-    });
-  }
+    }
+  });
 
   /*** Starry Background Functions ***/
   function createStars() {
     const starsContainer = document.querySelector(".stars");
+    if (!starsContainer) return;
+    
     const starCount = 150;
     for (let i = 0; i < starCount; i++) {
       const star = document.createElement("div");
@@ -188,6 +156,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function createParallaxStars() {
     const starsContainer = document.querySelector(".stars");
+    if (!starsContainer) return;
+    
     const layers = 3;
     const starsPerLayer = 50;
 
@@ -238,48 +208,6 @@ document.addEventListener("DOMContentLoaded", function () {
   createStars();
   createParallaxStars();
 
-  /*** Smooth Hover Effect for Mentors ***/
-  const mentors = document.querySelectorAll(".mentor");
-  if (mentors.length > 0) {
-    mentors.forEach((mentor) => {
-      mentor.addEventListener("mousemove", (e) => {
-        const rect = mentor.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        mentor.style.transform = `
-          perspective(1000px)
-          rotateX(${(y - rect.height / 2) / 10}deg)
-          rotateY(${-(x - rect.width / 2) / 10}deg)
-          translateY(-10px)
-        `;
-      });
-
-      mentor.addEventListener("mouseleave", () => {
-        mentor.style.transform = "translateY(-10px)";
-      });
-    });
-  }
-
-  /*** Scroll Animations ***/
-  const sections = document.querySelectorAll("section");
-  if (sections.length > 0) {
-    const options = {
-      threshold: 0.3,
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("visible");
-        }
-      });
-    }, options);
-
-    sections.forEach((section) => {
-      observer.observe(section);
-    });
-  }
-
   // Read More functionality for review cards
   const readMoreButtons = document.querySelectorAll(".read-more-btn");
 
@@ -321,372 +249,66 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   });
+  
+  // Initialize burger menu functionality
+  initBurgerMenu();
+});
 
-  // Consultation Form Handling
-  const consultationForm = document.getElementById("consultationForm");
+// Burger menu functionality
+function initBurgerMenu() {
+  const burgerButton = document.getElementById('open-menu');
+  const mobileMenu = document.getElementById('mobile-menu');
+  let isMenuOpen = false;
 
-  if (consultationForm) {
-    consultationForm.addEventListener("submit", async function (e) {
-      e.preventDefault();
-      console.log("Form submission started");
-
-      const submitBtn = this.querySelector(".submit-btn");
-      if (!submitBtn) return;
-
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Отправка...";
-
-      try {
-        // Get form data
-        const formData = {
-          name: document.getElementById("name")?.value || "",
-          email: document.getElementById("email")?.value || "",
-          phone: document.getElementById("phone")?.value || "",
-          location: document.getElementById("location")?.value || "",
-          major: document.getElementById("major")?.value || "",
-          ielts: {
-            status: document.getElementById("ielts_status")?.value || "",
-            score: document.getElementById("ielts_score")?.value || null,
-          },
-          sat: {
-            status: document.getElementById("sat_status")?.value || "",
-            english: document.getElementById("sat_english")?.value || null,
-            math: document.getElementById("sat_math")?.value || null,
-          },
-          age: document.getElementById("age")?.value || "",
-          extracurriculars: [],
-          honors: [],
-          education: document.getElementById("education")?.value || "",
-          goals: document.getElementById("goals")?.value || "",
-        };
-
-        console.log("Form data collected:", formData);
-
-        // Get extracurricular activities
-        const extracurricularsContainer = document.getElementById(
-          "extracurriculars_container"
-        );
-        if (extracurricularsContainer) {
-          const extracurricularInputs =
-            extracurricularsContainer.querySelectorAll('input[type="text"]');
-          const extracurricularTextareas =
-            extracurricularsContainer.querySelectorAll("textarea");
-
-          for (let i = 0; i < extracurricularInputs.length; i++) {
-            formData.extracurriculars.push({
-              activity: extracurricularInputs[i].value,
-              description: extracurricularTextareas[i]?.value || "",
-            });
-          }
-        }
-
-        // Get honors
-        const honorsContainer = document.getElementById("honors_container");
-        if (honorsContainer) {
-          const honorsInputs =
-            honorsContainer.querySelectorAll('input[type="text"]');
-          const honorsTextareas = honorsContainer.querySelectorAll("textarea");
-
-          for (let i = 0; i < honorsInputs.length; i++) {
-            formData.honors.push({
-              title: honorsInputs[i].value,
-              description: honorsTextareas[i]?.value || "",
-            });
-          }
-        }
-
-        console.log(
-          "Sending request to:",
-          "https://keneshai-backend.onrender.com/api/consultation"
-        );
-
-        const response = await fetch(
-          "https://keneshai-backend.onrender.com/api/consultation",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-            },
-            body: JSON.stringify(formData),
-          }
-        );
-
-        console.log("Response received:", response);
-
-        if (response.ok) {
-          const responseData = await response.json();
-          console.log("Success response:", responseData);
-          showNotification(
-            "Спасибо за вашу заявку! Мы свяжемся с вами в ближайшее время.",
-            "success"
-          );
-          consultationForm.reset();
-
-          // Clear dynamic fields
-          if (extracurricularsContainer)
-            extracurricularsContainer.innerHTML = "";
-          if (honorsContainer) honorsContainer.innerHTML = "";
-        } else {
-          const errorData = await response.json();
-          console.error("Server error response:", errorData);
-          throw new Error(
-            errorData.details || `Server error: ${response.status}`
-          );
-        }
-      } catch (error) {
-        console.error("Submission error:", error);
-        showNotification(
-          `Произошла ошибка при отправке формы: ${error.message}`,
-          "error"
-        );
-      } finally {
-        if (submitBtn) {
-          submitBtn.disabled = false;
-          submitBtn.textContent = "Записаться на консультацию";
-        }
+  if (burgerButton && mobileMenu) {
+    burgerButton.addEventListener('click', function(event) {
+      event.stopPropagation(); // Prevent the click from reaching the document
+      isMenuOpen = !isMenuOpen;
+      
+      if (isMenuOpen) {
+        mobileMenu.classList.add('active');
+        burgerButton.classList.add('active');
+        mobileMenu.setAttribute('open', ''); // Add attribute for alternative style
+      } else {
+        mobileMenu.classList.remove('active');
+        burgerButton.classList.remove('active');
+        mobileMenu.removeAttribute('open'); // Remove attribute
       }
     });
-  }
 
-  // Show/hide IELTS score input
-  const ieltsStatus = document.getElementById("ielts_status");
-  const ieltsScore = document.getElementById("ielts_score");
-
-  if (ieltsStatus && ieltsScore) {
-    ieltsStatus.addEventListener("change", function () {
-      ieltsScore.style.display = this.value === "taken" ? "block" : "none";
-    });
-  }
-
-  // Show/hide SAT scores
-  const satStatus = document.getElementById("sat_status");
-  const satScores = document.getElementById("sat_scores");
-  const satEnglish = document.getElementById("sat_english");
-  const satMath = document.getElementById("sat_math");
-
-  if (satStatus && satScores && satEnglish && satMath) {
-    satStatus.addEventListener("change", function () {
-      const isTaken = this.value === "taken";
-      satScores.style.display = isTaken ? "flex" : "none";
-
-      // Toggle required attribute based on SAT status
-      satEnglish.required = isTaken;
-      satMath.required = isTaken;
-
-      // Clear values when not taken
-      if (!isTaken) {
-        satEnglish.value = "";
-        satMath.value = "";
+    // Close menu when clicking outside
+    document.addEventListener('click', function(event) {
+      if (isMenuOpen && !mobileMenu.contains(event.target) && !burgerButton.contains(event.target)) {
+        mobileMenu.classList.remove('active');
+        burgerButton.classList.remove('active');
+        mobileMenu.removeAttribute('open');
+        isMenuOpen = false;
       }
     });
-  }
-
-  // Handle dynamic fields for extracurriculars
-  const extracurricularsCount = document.getElementById(
-    "extracurriculars_count"
-  );
-  if (extracurricularsCount) {
-    extracurricularsCount.addEventListener("change", function () {
-      const container = document.getElementById("extracurriculars_container");
-      if (!container) return;
-
-      container.innerHTML = "";
-      container.classList.add("visible");
-
-      for (let i = 0; i < this.value; i++) {
-        const formGroup = document.createElement("div");
-        formGroup.className = "form-group";
-
-        formGroup.innerHTML = `
-          <label>Внеклассная активность ${i + 1}</label>
-          <input type="text" name="extracurricular_${i + 1}" required>
-          <textarea name="extracurricular_desc_${
-            i + 1
-          }" placeholder="Описание" required></textarea>
-        `;
-
-        container.appendChild(formGroup);
-        setTimeout(() => formGroup.classList.add("visible"), 100 * i);
-      }
-    });
-  }
-
-  // Handle dynamic fields for honors
-  const honorsCount = document.getElementById("honors_count");
-  if (honorsCount) {
-    honorsCount.addEventListener("change", function () {
-      const container = document.getElementById("honors_container");
-      if (!container) return;
-
-      container.innerHTML = "";
-      container.classList.add("visible");
-
-      for (let i = 0; i < this.value; i++) {
-        const formGroup = document.createElement("div");
-        formGroup.className = "form-group";
-
-        formGroup.innerHTML = `
-          <label>Достижение ${i + 1}</label>
-          <input type="text" name="honor_${i + 1}" required>
-          <textarea name="honor_desc_${
-            i + 1
-          }" placeholder="Описание" required></textarea>
-        `;
-
-        container.appendChild(formGroup);
-        setTimeout(() => formGroup.classList.add("visible"), 100 * i);
-      }
-    });
-  }
-
-  // Script for burguur
-  const menu = {
-    buttons: {
-      open: document.getElementById("open-menu"),
-      // close: document.getElementById(),
-    },
-    menuElement: document.getElementById("mobile-menu"),
-    state: false,
-    open() {
-      menu.state = true;
-      menu.menuElement.setAttribute("open", "");
-    },
-    close() {
-      menu.state = false;
-      menu.menuElement.removeAttribute("open");
-    },
-  };
-
-  menu.buttons.open.addEventListener("click", () => {
-    !menu.state
-      ? (() => {
-          menu.open();
-        })()
-      : (() => {
-          menu.close();
-        })();
-  });
-
-  // Handle iOS touch events
-  if (nav) {
-    nav.addEventListener(
-      "touchstart",
-      function (e) {
-        if (e.target.tagName !== "A") {
-          e.preventDefault();
-        }
-      },
-      { passive: false }
-    );
   }
 
   // Close menu on orientation change
   window.addEventListener("orientationchange", function () {
-    if (nav && nav.classList.contains("active")) {
-      hamburger.classList.remove("active");
-      nav.classList.remove("active");
+    if (mobileMenu && (mobileMenu.classList.contains("active") || mobileMenu.hasAttribute('open'))) {
+      burgerButton.classList.remove("active");
+      mobileMenu.classList.remove("active");
+      mobileMenu.removeAttribute('open');
+      isMenuOpen = false;
     }
   });
+}
 
-  // Mentor Application Form Handler
-  const mentorForm = document.getElementById("mentorForm");
-  if (mentorForm) {
-    mentorForm.addEventListener("submit", async function (e) {
-      e.preventDefault();
+// Call initBurgerMenu function outside DOMContentLoaded to ensure it runs on all pages
+initBurgerMenu();
 
-      // Show loading state
-      const submitButton = this.querySelector('button[type="submit"]');
-      const originalButtonText = submitButton.textContent;
-      submitButton.textContent = "Отправка...";
-      submitButton.disabled = true;
-
-      try {
-        // Format data according to mentor schema
-        const formData = {
-          name: this.querySelector('[name="name"]').value,
-          email: this.querySelector('[name="email"]').value,
-          phone: this.querySelector('[name="phone"]').value,
-          university: this.querySelector('[name="university"]').value,
-          major: this.querySelector('[name="major"]').value,
-          year: this.querySelector('[name="year"]').value,
-          experience: this.querySelector('[name="experience"]').value,
-          motivation: this.querySelector('[name="motivation"]').value,
-          availability: parseInt(
-            this.querySelector('[name="availability"]').value
-          ),
-        };
-
-        console.log('Sending mentor application:', formData);
-        
-        // Show loading notification
-        showNotification('Отправка заявки... Пожалуйста, подождите.', 'info');
-
-        // Set up timeout
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
-
-        const response = await fetch('https://keneshai-backend.onrender.com/api/mentor-application', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify(formData),
-          signal: controller.signal
-        });
-
-        clearTimeout(timeoutId);
-        console.log('Response status:', response.status);
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          console.error('Server error response:', errorData);
-          throw new Error(errorData.details || `Server error: ${response.status}`);
-        }
-
-        const result = await response.json();
-        console.log('Success response:', result);
-        
-        showNotification('Спасибо за вашу заявку! Мы свяжемся с вами в ближайшее время.', 'success');
-        mentorForm.reset();
-      } catch (error) {
-        console.error('Error:', error);
-        if (error.name === 'AbortError') {
-          showNotification('Сервер не отвечает. Пожалуйста, попробуйте позже.', 'error');
-        } else {
-          showNotification(`Произошла ошибка при отправке формы: ${error.message}`, 'error');
-        }
-      } finally {
-        // Restore button state
-        submitButton.textContent = originalButtonText;
-        submitButton.disabled = false;
-      }
-    });
-  }
-
-  // CTA Banner Close Functionality
-  const ctaBanner = document.querySelector(".cta-banner");
-  const closeBtn = document.querySelector(".cta-banner .close-btn");
-
-  if (ctaBanner && closeBtn) {
-    closeBtn.addEventListener("click", function () {
-      ctaBanner.classList.add("hidden");
-    });
-  }
-});
-
-// Notification System
+// Simplified notification system (useful for UI feedback)
 function showNotification(message, type = "success") {
   const notification = document.createElement("div");
   notification.className = `notification ${type}`;
   notification.textContent = message;
 
   document.body.appendChild(notification);
-
-  // Trigger reflow
-  notification.offsetHeight;
-
+  notification.offsetHeight; // Trigger reflow
   notification.classList.add("show");
 
   setTimeout(() => {

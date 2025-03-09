@@ -1,0 +1,432 @@
+/* Main Page Styles */
+
+/* Prevent horizontal scrolling for all devices */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* Make sure all containers respect viewport boundaries */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+/* Ensure images don't cause overflow */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Mobile Menu Styles - Important Fixes */
+#mobile-menu {
+    position: fixed;
+    top: 80px;
+    right: -100%;
+    width: 100%;
+    max-width: 300px;
+    background: rgba(26, 26, 46, 0.95);
+    backdrop-filter: blur(10px);
+    border-left: 1px solid rgba(255, 215, 0, 0.2);
+    height: calc(100vh - 80px);
+    transition: right 0.3s ease;
+    z-index: 1000;
+    padding: 2rem;
+    display: block !important; /* Force display, override other CSS */
+}
+
+/* Override attribute selector from styles.css */
+#mobile-menu[open] {
+    right: 0 !important;
+    display: block !important;
+}
+
+/* Active state for JS toggle */
+#mobile-menu.active {
+    right: 0 !important;
+}
+
+.mobile_nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.mobile_nav li {
+    margin: 1.5rem 0;
+}
+
+.mobile_nav a {
+    color: #FFD700;
+    text-decoration: none;
+    font-size: 1.3rem;
+    display: block;
+    padding: 0.8rem 1.2rem;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+}
+
+.mobile_nav a:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Extra styles for visibility of burger menu */
+body .site-header .main-nav {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+/* Burger menu styling - with high specificity to override styles3.css */
+body .site-header .main-nav .burger-menu {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 20px;
+    cursor: pointer;
+    z-index: 1001;
+    position: relative; /* Ensure proper stacking */
+}
+
+body .site-header .main-nav .burger-menu span {
+    display: block;
+    width: 100%;
+    height: 3px; /* Increase thickness for better visibility */
+    background: #FFD700 !important; /* Force golden color */
+    transition: all 0.3s ease;
+    border-radius: 2px; /* Round the edges slightly */
+    margin-bottom: 5px; /* Add spacing between lines */
+}
+
+body .site-header .main-nav .burger-menu span:last-child {
+    margin-bottom: 0;
+}
+
+body .site-header .main-nav .burger-menu.active span:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+}
+
+body .site-header .main-nav .burger-menu.active span:nth-child(2) {
+    opacity: 0;
+}
+
+body .site-header .main-nav .burger-menu.active span:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+}
+
+/* Mobile Responsiveness Fixes - Consolidated Media Queries */
+@media (max-width: 768px) {
+    /* Ensure burger menu is visible */
+    body .site-header .main-nav .burger-menu {
+        display: flex !important; /* Force display */
+        margin-right: 10px;
+        width: 35px;
+        height: 25px;
+        padding: 5px;
+        background-color: rgba(26, 26, 46, 0.7);
+        border-radius: 5px;
+        border: 1px solid rgba(255, 215, 0, 0.3);
+    }
+    
+    body .site-header .main-nav .burger-menu span {
+        height: 4px; /* Extra thick */
+        box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+    }
+    
+    /* Ensure logo isn't too large on mobile */
+    body .site-header .logo {
+        max-width: 60px;
+    }
+    
+    body .site-header .main-nav .nav__menu {
+        display: none !important; /* Force hide */
+    }
+    
+    /* Fix for moon squashing */
+    .hero {
+        flex-direction: column-reverse;
+        text-align: center;
+        padding: 50px 0;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    /* Ensure review cards don't overflow */
+    .reviews-grid {
+        padding: 0 10px;
+        width: 100%;
+        box-sizing: border-box;
+        overflow-x: hidden;
+    }
+    
+    /* Fix possible container overflow */
+    .container, 
+    .content, 
+    section,
+    .hero-header,
+    .hero-content,
+    .review-content,
+    .mentor-grid {
+        width: 100%;
+        box-sizing: border-box;
+        padding-left: 15px;
+        padding-right: 15px;
+        overflow-x: hidden;
+    }
+    
+    /* Remove any fixed widths */
+    .mentor, 
+    .review-card,
+    .cta-banner,
+    .faq-question,
+    .faq-answer {
+        width: auto;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .moon {
+        width: 200px;
+        height: 200px;
+        margin: 0 auto 30px;
+    }
+    
+    .hero-header h1 {
+        font-size: 2.5rem;
+        word-wrap: break-word;
+    }
+    
+    .hero-header p {
+        font-size: 1rem;
+        padding: 0 15px;
+    }
+    
+    /* Improve readability for mentor section */
+    .mentor-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .mentor {
+        margin-bottom: 30px;
+        max-width: 100%;
+    }
+    
+    /* Make review cards more readable */
+    .review-card {
+        width: 100%;
+        padding: 15px;
+    }
+    
+    /* General text fixes for mobile */
+    h2 {
+        font-size: 1.8rem;
+    }
+    
+    p {
+        font-size: 1rem;
+    }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+    .moon {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .hero-header h1 {
+        font-size: 2rem;
+    }
+    
+    .cta-button {
+        text-align: center;
+        padding: 12px 20px;
+    }
+    
+    .review-author img {
+        width: 40px;
+        height: 40px;
+    }
+    
+    /* Fix for testimonial section text overflow */
+    .review-content {
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+    
+    .author-name {
+        font-size: 0.9rem;
+    }
+    
+    .author-title {
+        font-size: 0.8rem;
+    }
+    
+    /* Fix for mentor section on very small screens */
+    .mentor h3 {
+        font-size: 1.2rem;
+    }
+    
+    .mentor p {
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+    
+    /* Fix double container issue */
+    div.container.content {
+        padding: 0;
+    }
+    
+    /* Better spacing for mobile */
+    section {
+        padding: 30px 0;
+    }
+    
+    .hero {
+        padding: 30px 0;
+    }
+    
+    /* Fix for CTA banner on mobile */
+    .cta-banner {
+        padding: 10px;
+        text-align: center;
+    }
+    
+    .cta-banner p {
+        font-size: 0.9rem;
+        padding-right: 25px;
+    }
+    
+    .cta-banner a {
+        display: block;
+        margin-top: 10px;
+    }
+    
+    /* Adjust padding for smaller screens */
+    .container, 
+    .content, 
+    section,
+    .hero-header,
+    .hero-content,
+    .review-content,
+    .mentor-grid {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    
+    /* Fix for review content that might overflow */
+    .review-content {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        hyphens: auto;
+    }
+}
+
+/* Additional fixes to prevent horizontal scrolling */
+
+/* Ensure tables don't overflow */
+table {
+    width: 100%;
+    max-width: 100%;
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+/* Fix for flexbox layouts */
+.flex-container,
+.footer-content,
+.site-footer,
+.social-links {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    flex-wrap: wrap;
+}
+
+/* Fix for preloader and stars background */
+.preloader,
+.stars,
+.star-layer-1,
+.star-layer-2,
+.star-layer-3 {
+    width: 100vw;
+    max-width: 100%;
+    overflow: hidden;
+    left: 0;
+    right: 0;
+    position: absolute;
+}
+
+/* Fix for the site header */
+.site-header {
+    width: 100%;
+    max-width: 100vw;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+/* Fix for reviews section and scrolling grid */
+.reviews {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.reviews-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none; /* Firefox */
+    padding: 0 15px;
+    margin: 0 -15px;
+    width: calc(100% + 30px);
+    box-sizing: border-box;
+}
+
+.reviews-grid::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Edge */
+}
+
+.review-card {
+    flex: 0 0 auto;
+    width: 85%;
+    scroll-snap-align: start;
+    margin-right: 15px;
+    box-sizing: border-box;
+}
+
+.review-card:last-child {
+    margin-right: 0;
+}
+
+/* Fix the read-more button to ensure it doesn't cause overflow */
+.read-more-btn {
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+@media (max-width: 480px) {
+    .reviews-grid {
+        margin: 0 -10px;
+        padding: 0 10px;
+        width: calc(100% + 20px);
+    }
+    
+    .review-card {
+        width: 90%;
+        margin-right: 10px;
+    }
+} 
