@@ -1,9 +1,14 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" class="loading">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Keneshai - Руководство по поступлению в университет</title>
+    <!-- Preloader visibility script -->
+    <script>
+      // Force preloader visibility immediately
+      document.documentElement.classList.add("loading");
+    </script>
     <!-- <link rel="stylesheet" href="styles.css"> -->
     <link rel="stylesheet" href="styles3.css" />
     <link rel="stylesheet" href="main.css" />
@@ -35,12 +40,18 @@
     </div>
 
     <div class="preloader">
-      <div class="rocket">
-        <div class="rocket-body"></div>
-        <div class="exhaust-flame"></div>
-        <div class="window"></div>
+      <div class="preloader-content">
+        <div class="rocket">
+          <div class="rocket-body"></div>
+          <div class="exhaust-flame"></div>
+          <div class="window"></div>
+        </div>
+        <div class="preloader-stars">
+          <div class="preloader-star-layer preloader-star-layer-1"></div>
+          <div class="preloader-star-layer preloader-star-layer-2"></div>
+          <div class="preloader-star-layer preloader-star-layer-3"></div>
+        </div>
       </div>
-      <div class="stars"></div>
     </div>
 
     <!-- Header -->
@@ -172,7 +183,7 @@
         </div>
         <div class="mentor-cta">
           <p>Хотите стать частью нашей команды?</p>
-          <a href="become-mentor.html" class="cta-button">Стать Ментором</a>
+          <a href="https://forms.gle/EeqYVvN4ipKbwGLR6" class="cta-button">Стать Ментором</a>
         </div>
       </section>
 
@@ -247,14 +258,14 @@
               поделиться своим опытом который я получил за час разговора с ним.
               Первое что хочу отметить - профессионализм и четкий подход к моему
               портфолио. Он проанализировал мой кейс и подобрал соответствующие
-              советы и направил меня по пути которому мне следует идти😱, до
+              советы и направил меня по пути которому мне следует идти. До
               него я был во множестве мероприятий которые так же под предлогом
               консультации проводили бесплатные созвоны - в отличии от тех
-              организаций которые максимально пытались продать свои курсы😐
-              советы Айхана были искренними и нацеленные на мой успех. Безумно
+              организаций которые максимально пытались продать свои курсы.
+              Советы Айхана были искренними и нацеленные на мой успех. Безумно
               благодарен ему за проведенный час со мной, после созвона я
               чувствую себя очень мотивированным и имею четкое понятие о своих
-              будущих действиях😊"
+              будущих действиях."
             </div>
             <button class="read-more-btn"><span>Читать далее</span></button>
             <div class="review-rating">
@@ -327,13 +338,21 @@
               <span class="star">★</span>
             </div>
             <div class="review-author">
-              <img src="./Алихан.jpg" alt="Дихан Тлеубаев" />
+              <img src="./дихаг.jpg" alt="Дихан Тлеубаев" />
               <div class="author-info">
                 <h3 class="author-name">Дихан Тлеубаев</h3>
                 <p class="author-title">Bioengineering</p>
               </div>
             </div>
             <div class="review-date">5 марта 2025</div>
+          </div>
+        </div>
+        <div class="reviews-section-controls">
+          <div class="scroll-arrow scroll-left">
+            <i class="fas fa-chevron-left"></i>
+          </div>
+          <div class="scroll-arrow scroll-right">
+            <i class="fas fa-chevron-right"></i>
           </div>
         </div>
       </section>

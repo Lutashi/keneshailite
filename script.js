@@ -1,12 +1,26 @@
 // Core UI functionality
 window.addEventListener("load", () => {
-  // Remove preloader
+  // Remove loading class from HTML
+  document.documentElement.classList.remove("loading");
+
+  // Remove preloader after minimum display time
   const preloader = document.querySelector(".preloader");
   if (preloader) {
-    preloader.style.opacity = "0";
+    // Force preloader to show for at least 2 seconds (2000ms)
+    const minimumLoadingTime = 2000;
+    const startTime = Date.now();
+    const elapsedTime = Date.now() - startTime;
+    const remainingTime = Math.max(minimumLoadingTime - elapsedTime, 500);
+    
     setTimeout(() => {
-      preloader.style.display = "none";
-    }, 500);
+      // Add hiding class for fade out animation
+      preloader.classList.add("hiding");
+      
+      // Wait for animation to complete then hide
+      setTimeout(() => {
+        preloader.style.display = "none";
+      }, 500);
+    }, remainingTime);
   }
 
   // Scroll animations for sections
@@ -103,18 +117,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /*** Smooth Scroll for CTA Button ***/
   document.querySelectorAll('.cta-button').forEach(button => {
-    if (button && !button.getAttribute('target')) {
-      button.addEventListener("click", function (e) {
+    button.addEventListener("click", function (e) {
+      const href = this.getAttribute('href');
+      // Only prevent default for internal links (those starting with #)
+      if (href && href.startsWith('#')) {
         e.preventDefault();
-        const href = this.getAttribute('href');
-        if (href && href.startsWith('#')) {
-          const targetSection = document.querySelector(href);
-          if (targetSection) {
-            targetSection.scrollIntoView({ behavior: "smooth" });
-          }
+        const targetSection = document.querySelector(href);
+        if (targetSection) {
+          targetSection.scrollIntoView({ behavior: "smooth" });
         }
-      });
-    }
+      }
+    });
   });
 
   /*** Starry Background Functions ***/
@@ -212,7 +225,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const readMoreButtons = document.querySelectorAll(".read-more-btn");
 
   readMoreButtons.forEach((button) => {
-    button.addEventListener("click", function () {
+    button.addEventListener("click", function (e) {
+      e.preventDefault(); // Prevent default button behavior
+      
       const reviewContent = this.previousElementSibling;
       const isExpanded = reviewContent.classList.contains("expanded");
       const buttonText = this.querySelector("span");
@@ -225,6 +240,12 @@ document.addEventListener("DOMContentLoaded", function () {
         reviewContent.classList.remove("expanded");
         buttonText.textContent = "Читать далее";
         this.classList.remove("expanded");
+        
+        // Scroll back to the top of the review card
+        const reviewCard = this.closest('.review-card');
+        if (reviewCard) {
+          reviewCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
       }
     });
   });
@@ -252,6 +273,83 @@ document.addEventListener("DOMContentLoaded", function () {
   
   // Initialize burger menu functionality
   initBurgerMenu();
+
+  // Horizontal scroll for reviews
+  const reviewsGrid = document.querySelector('.reviews-grid');
+  const scrollLeftBtn = document.querySelector('.scroll-left');
+  const scrollRightBtn = document.querySelector('.scroll-right');
+  
+  if (reviewsGrid && scrollLeftBtn && scrollRightBtn) {
+    // Calculate scroll distance (one review card + margin)
+    const scrollDistance = 420; // Approximate width of card + gap
+    
+    // Scroll left button click
+    scrollLeftBtn.addEventListener('click', function() {
+      reviewsGrid.scrollBy({
+        left: -scrollDistance,
+        behavior: 'smooth'
+      });
+    });
+    
+    // Scroll right button click
+    scrollRightBtn.addEventListener('click', function() {
+      reviewsGrid.scrollBy({
+        left: scrollDistance,
+        behavior: 'smooth'
+      });
+    });
+    
+    // Highlight active navigation arrows based on scroll position
+    reviewsGrid.addEventListener('scroll', function() {
+      // Show/hide left arrow based on scroll position
+      if (reviewsGrid.scrollLeft <= 10) {
+        scrollLeftBtn.classList.add('disabled');
+      } else {
+        scrollLeftBtn.classList.remove('disabled');
+      }
+      
+      // Show/hide right arrow based on whether we can scroll further right
+      const maxScrollLeft = reviewsGrid.scrollWidth - reviewsGrid.clientWidth - 10;
+      if (reviewsGrid.scrollLeft >= maxScrollLeft) {
+        scrollRightBtn.classList.add('disabled');
+      } else {
+        scrollRightBtn.classList.remove('disabled');
+      }
+    });
+    
+    // Initialize arrow states
+    reviewsGrid.dispatchEvent(new Event('scroll'));
+    
+    // Add drag scrolling for mobile
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+    
+    reviewsGrid.addEventListener('mousedown', (e) => {
+      isDown = true;
+      reviewsGrid.classList.add('active');
+      startX = e.pageX - reviewsGrid.offsetLeft;
+      scrollLeft = reviewsGrid.scrollLeft;
+    });
+    
+    reviewsGrid.addEventListener('mouseleave', () => {
+      isDown = false;
+      reviewsGrid.classList.remove('active');
+    });
+    
+    reviewsGrid.addEventListener('mouseup', () => {
+      isDown = false;
+      reviewsGrid.classList.remove('active');
+    });
+    
+    reviewsGrid.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - reviewsGrid.offsetLeft;
+      const walk = (x - startX) * 2; // Scroll speed multiplier
+      reviewsGrid.scrollLeft = scrollLeft - walk;
+    });
+  }
 });
 
 // Burger menu functionality
@@ -355,3 +453,116 @@ style.textContent = `
   }
 `;
 document.head.appendChild(style);
+
+// WhatsApp Carousel Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const track = document.querySelector('.carousel-track');
+    const slides = Array.from(track.children);
+    const nextButton = document.querySelector('.carousel-button.next');
+    const prevButton = document.querySelector('.carousel-button.prev');
+    const dotsNav = document.querySelector('.carousel-dots');
+    const dots = Array.from(dotsNav.children);
+
+    const slideWidth = slides[0].getBoundingClientRect().width;
+
+    // Arrange the slides next to one another
+    slides.forEach((slide, index) => {
+        slide.style.left = slideWidth * index + 'px';
+    });
+
+    const moveToSlide = (track, currentSlide, targetSlide) => {
+        track.style.transform = 'translateX(-' + targetSlide.style.left + ')';
+        currentSlide.classList.remove('active');
+        targetSlide.classList.add('active');
+    }
+
+    const updateDots = (currentDot, targetDot) => {
+        currentDot.classList.remove('active');
+        targetDot.classList.add('active');
+    }
+
+    const hideShowArrows = (slides, prevButton, nextButton, targetIndex) => {
+        if (targetIndex === 0) {
+            prevButton.classList.add('is-hidden');
+            nextButton.classList.remove('is-hidden');
+        } else if (targetIndex === slides.length - 1) {
+            prevButton.classList.remove('is-hidden');
+            nextButton.classList.add('is-hidden');
+        } else {
+            prevButton.classList.remove('is-hidden');
+            nextButton.classList.remove('is-hidden');
+        }
+    }
+
+    // Click handlers for next/prev buttons
+    nextButton.addEventListener('click', e => {
+        const currentSlide = track.querySelector('.active');
+        const nextSlide = currentSlide.nextElementSibling;
+        const currentDot = dotsNav.querySelector('.active');
+        const nextDot = currentDot.nextElementSibling;
+        const nextIndex = slides.findIndex(slide => slide === nextSlide);
+
+        moveToSlide(track, currentSlide, nextSlide);
+        updateDots(currentDot, nextDot);
+        hideShowArrows(slides, prevButton, nextButton, nextIndex);
+    });
+
+    prevButton.addEventListener('click', e => {
+        const currentSlide = track.querySelector('.active');
+        const prevSlide = currentSlide.previousElementSibling;
+        const currentDot = dotsNav.querySelector('.active');
+        const prevDot = currentDot.previousElementSibling;
+        const prevIndex = slides.findIndex(slide => slide === prevSlide);
+
+        moveToSlide(track, currentSlide, prevSlide);
+        updateDots(currentDot, prevDot);
+        hideShowArrows(slides, prevButton, nextButton, prevIndex);
+    });
+
+    // Click handlers for dots
+    dotsNav.addEventListener('click', e => {
+        const targetDot = e.target.closest('button');
+        if (!targetDot) return;
+
+        const currentSlide = track.querySelector('.active');
+        const currentDot = dotsNav.querySelector('.active');
+        const targetIndex = dots.findIndex(dot => dot === targetDot);
+        const targetSlide = slides[targetIndex];
+
+        moveToSlide(track, currentSlide, targetSlide);
+        updateDots(currentDot, targetDot);
+        hideShowArrows(slides, prevButton, nextButton, targetIndex);
+    });
+
+    // Auto-advance carousel every 5 seconds
+    let carouselInterval = setInterval(() => {
+        const currentSlide = track.querySelector('.active');
+        const nextSlide = currentSlide.nextElementSibling || slides[0];
+        const currentDot = dotsNav.querySelector('.active');
+        const nextDot = currentDot.nextElementSibling || dots[0];
+        const nextIndex = slides.findIndex(slide => slide === nextSlide);
+
+        moveToSlide(track, currentSlide, nextSlide);
+        updateDots(currentDot, nextDot);
+        hideShowArrows(slides, prevButton, nextButton, nextIndex);
+    }, 5000);
+
+    // Pause auto-advance on hover
+    track.addEventListener('mouseenter', () => {
+        clearInterval(carouselInterval);
+    });
+
+    track.addEventListener('mouseleave', () => {
+        carouselInterval = setInterval(() => {
+            const currentSlide = track.querySelector('.active');
+            const nextSlide = currentSlide.nextElementSibling || slides[0];
+            const currentDot = dotsNav.querySelector('.active');
+            const nextDot = currentDot.nextElementSibling || dots[0];
+            const nextIndex = slides.findIndex(slide => slide === nextSlide);
+
+            moveToSlide(track, currentSlide, nextSlide);
+            updateDots(currentDot, nextDot);
+            hideShowArrows(slides, prevButton, nextButton, nextIndex);
+        }, 5000);
+    });
+});

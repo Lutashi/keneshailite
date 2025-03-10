@@ -55,7 +55,7 @@
 
 /* Enhanced Package Cards */
 .packages {
-    padding: var(--section-padding);
+    padding: 120px 0 var(--section-padding);
 }
 
 .packages-grid {
@@ -663,4 +663,177 @@
 
 .benefit-card:nth-child(3) {
     animation-delay: 0.4s;
+}
+
+/* WhatsApp Preview Section */
+.whatsapp-preview {
+    padding: 40px 0;
+    background: rgba(26, 26, 46, 0.6);
+    border-radius: 15px;
+    margin: 40px 0;
+}
+
+.carousel-container {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+    padding: 20px;
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.5s ease;
+}
+
+.carousel-slide {
+    min-width: 100%;
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+
+.whatsapp-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.carousel-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 215, 0, 0.2);
+    border: 2px solid #FFD700;
+    color: #FFD700;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.carousel-button:hover {
+    background: rgba(255, 215, 0, 0.4);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-button.prev {
+    left: 20px;
+}
+
+.carousel-button.next {
+    right: 20px;
+}
+
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 215, 0, 0.3);
+    border: 1px solid #FFD700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dot.active {
+    background: #FFD700;
+    transform: scale(1.2);
+}
+
+@media (max-width: 768px) {
+    .carousel-container {
+        padding: 10px;
+    }
+    
+    .carousel-button {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+.whatsapp-cta {
+    margin-top: 25px;
+    text-align: center;
+    padding: 20px;
+    background: rgba(26, 26, 46, 0.8);
+    border-radius: 15px;
+    border: 2px solid #FFD700;
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+}
+
+.whatsapp-cta h3 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(45deg, #FFD700, #FFA500, #FFD700);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shine 2s linear infinite;
+    text-shadow: 0 2px 15px rgba(255, 215, 0, 0.4);
+    letter-spacing: 2px;
+}
+
+@keyframes shine {
+    0% {
+        background-position: -200% center;
+    }
+    100% {
+        background-position: 200% center;
+    }
+}
+
+@media (max-width: 768px) {
+    .whatsapp-cta h3 {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .whatsapp-cta h3 {
+        font-size: 2rem;
+    }
+    .whatsapp-cta {
+        padding: 15px;
+        margin-top: 15px;
+    }
+}
+
+/* Add hover effect */
+.whatsapp-cta:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+/* Add pulsing animation */
+.whatsapp-cta {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+    }
+    50% {
+        box-shadow: 0 0 40px rgba(255, 215, 0, 0.4);
+    }
+    100% {
+        box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+    }
 } 

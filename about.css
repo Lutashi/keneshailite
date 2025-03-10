@@ -29,9 +29,37 @@
     word-wrap: break-word;
 }
 
+.values-container {
+    text-align: center;
+    width: 100%;
+}
+
+.values-list {
+    list-style-position: inside;
+    padding-left: 0;
+    max-width: 600px;
+    margin: 0 auto;
+    display: inline-block;
+    text-align: left;
+}
+
 .values-list li {
-    margin-bottom: 0.8rem;
+    margin-bottom: 1.2rem;
     word-wrap: break-word;
+    text-align: left;
+    list-style: none;
+    position: relative;
+    padding-left: 25px;
+    display: block;
+}
+
+.values-list li::before {
+    content: "★";
+    color: #FFD700;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 /* Media queries for mobile devices */
