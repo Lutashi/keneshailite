@@ -1682,3 +1682,155 @@ section.visible {
     font-size: 1.1rem;
   }
 }
+
+.typing-container {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: left;
+    padding: 20px;
+}
+
+.hero h2 {
+    position: relative;
+    width: 100%;
+    font-family: 'Space Grotesk', sans-serif;
+    color: #FFD700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+    font-size: 2.2rem;
+    line-height: 1.4;
+    text-align: left;
+    margin: 0;
+}
+
+.static-text {
+    display: inline-block;
+}
+
+#typed-text {
+    color: #FFD700;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: inherit;
+    font-weight: inherit;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+    display: inline-block;
+}
+
+.cursor {
+    display: inline-block;
+    color: #FFD700;
+    font-weight: bold;
+    animation: blink 0.75s step-end infinite;
+    margin-left: 1px;
+}
+
+@keyframes blink {
+    from, to { 
+        opacity: 1; 
+    }
+    50% { 
+        opacity: 0; 
+    }
+}
+
+@media (max-width: 768px) {
+    .hero h2 {
+        font-size: 1.8rem;
+    }
+    
+    .typing-container {
+        padding: 10px;
+    }
+    
+    #typed-text, .cursor {
+        font-size: inherit;
+    }
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    width: 120px;
+    height: auto;
+    transition: transform 0.3s ease;
+}
+
+.logo img:hover {
+    transform: scale(0.95);
+}
+
+.credits {
+    text-align: center;
+    margin: 12px 0;
+    padding: 10px 0;
+    font-family: 'Manrope', sans-serif;
+    position: relative;
+    border-top: 1px solid rgba(255, 215, 0, 0.2);
+    border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.credits::before, .credits::after {
+    content: "★";
+    color: #FFD700;
+    position: absolute;
+    top: -8px;
+    font-size: 16px;
+    background-color: #1a1a2e;
+    padding: 0 12px;
+}
+
+.credits::before {
+    left: calc(50% - 50px);
+}
+
+.credits::after {
+    right: calc(50% - 50px);
+}
+
+.credits p {
+    margin: 3px 0;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.4;
+}
+
+.credit-label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 3px;
+    color: #FFD700;
+    font-size: 0.95rem;
+}
+
+.credit-name {
+    font-weight: 600;
+    color: #FFD700;
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.credit-name:hover {
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+}
+
+@media (max-width: 768px) {
+    .credits {
+        margin: 10px 0;
+        padding: 8px 0;
+        max-width: 100%;
+    }
+    
+    .credits p {
+        font-size: 0.8rem;
+    }
+    
+    .credit-label {
+        font-size: 0.9rem;
+    }
+}

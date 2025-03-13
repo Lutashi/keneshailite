@@ -7,10 +7,10 @@ window.addEventListener("load", () => {
   const preloader = document.querySelector(".preloader");
   if (preloader) {
     // Force preloader to show for at least 2 seconds (2000ms)
-    const minimumLoadingTime = 2000;
+    const minimumLoadingTime = 0;
     const startTime = Date.now();
     const elapsedTime = Date.now() - startTime;
-    const remainingTime = Math.max(minimumLoadingTime - elapsedTime, 500);
+    const remainingTime = Math.max(minimumLoadingTime - elapsedTime, 0);
     
     setTimeout(() => {
       // Add hiding class for fade out animation
@@ -56,7 +56,41 @@ window.addEventListener("load", () => {
       }
     });
   });
+  
+  // Read More functionality for review cards - duplicated in window.load for reliability
+  initReadMoreButtons();
 });
+
+// Function to initialize Read More buttons
+function initReadMoreButtons() {
+  const readMoreButtons = document.querySelectorAll(".read-more-btn");
+  
+  readMoreButtons.forEach((button) => {
+    button.addEventListener("click", function (e) {
+      e.preventDefault(); // Prevent default button behavior
+      
+      const reviewContent = this.previousElementSibling;
+      const isExpanded = reviewContent.classList.contains("expanded");
+      const buttonText = this.querySelector("span");
+
+      if (!isExpanded) {
+        reviewContent.classList.add("expanded");
+        buttonText.textContent = "Свернуть";
+        this.classList.add("expanded");
+      } else {
+        reviewContent.classList.remove("expanded");
+        buttonText.textContent = "Читать далее";
+        this.classList.remove("expanded");
+        
+        // Scroll back to the top of the review card
+        const reviewCard = this.closest('.review-card');
+        if (reviewCard) {
+          reviewCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      }
+    });
+  });
+}
 
 // Mentor Hover Animation
 document.querySelectorAll(".mentor").forEach((mentor) => {
@@ -221,34 +255,8 @@ document.addEventListener("DOMContentLoaded", function () {
   createStars();
   createParallaxStars();
 
-  // Read More functionality for review cards
-  const readMoreButtons = document.querySelectorAll(".read-more-btn");
-
-  readMoreButtons.forEach((button) => {
-    button.addEventListener("click", function (e) {
-      e.preventDefault(); // Prevent default button behavior
-      
-      const reviewContent = this.previousElementSibling;
-      const isExpanded = reviewContent.classList.contains("expanded");
-      const buttonText = this.querySelector("span");
-
-      if (!isExpanded) {
-        reviewContent.classList.add("expanded");
-        buttonText.textContent = "Свернуть";
-        this.classList.add("expanded");
-      } else {
-        reviewContent.classList.remove("expanded");
-        buttonText.textContent = "Читать далее";
-        this.classList.remove("expanded");
-        
-        // Scroll back to the top of the review card
-        const reviewCard = this.closest('.review-card');
-        if (reviewCard) {
-          reviewCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
-      }
-    });
-  });
+  // Initialize read more buttons
+  initReadMoreButtons();
 
   // Smooth scroll for all anchor links
   document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
@@ -276,8 +284,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Horizontal scroll for reviews
   const reviewsGrid = document.querySelector('.reviews-grid');
-  const scrollLeftBtn = document.querySelector('.scroll-left');
-  const scrollRightBtn = document.querySelector('.scroll-right');
+  const scrollLeftBtn = document.querySelector('.scroll-arrow.scroll-left');
+  const scrollRightBtn = document.querySelector('.scroll-arrow.scroll-right');
   
   if (reviewsGrid && scrollLeftBtn && scrollRightBtn) {
     // Calculate scroll distance (one review card + margin)
