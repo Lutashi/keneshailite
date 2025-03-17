@@ -1,4 +1,49 @@
 // Core UI functionality
+// Star creation functions moved outside event handlers
+function createStars() {
+  const starsContainer = document.querySelector(".stars");
+  if (!starsContainer) return;
+  
+  const starCount = 150;
+  for (let i = 0; i < starCount; i++) {
+    const star = document.createElement("div");
+    star.className = "star";
+
+    // Random position
+    const x = Math.random() * 100;
+    const y = Math.random() * 100;
+
+    // Random size (small stars look better)
+    const size = Math.random() * 2 + 1;
+
+    // Random movement speed and distance
+    const moveSpeed = Math.random() * 10 + 5; // Between 5-15 seconds
+    const moveDistance = Math.random() * 20 + 10; // Between 10-30 pixels
+
+    star.style.left = `${x}%`;
+    star.style.top = `${y}%`;
+    star.style.width = `${size}px`;
+    star.style.height = `${size}px`;
+    star.style.animation = `starMove ${moveSpeed}s ease-in-out infinite`;
+    star.style.animationDelay = `${Math.random() * 5}s`; // Random delay for more natural movement
+
+    // Add the star to the container
+    starsContainer.appendChild(star);
+  }
+}
+
+function createStarLayers() {
+  const starsContainer = document.querySelector(".stars");
+  if (!starsContainer) return;
+  
+  const layers = 3;
+  for (let layer = 1; layer <= layers; layer++) {
+    const layerElement = document.createElement("div");
+    layerElement.className = `star-layer star-layer-${layer}`;
+    starsContainer.appendChild(layerElement);
+  }
+}
+
 window.addEventListener("load", () => {
   // Remove loading class from HTML
   document.documentElement.classList.remove("loading");
@@ -6,22 +51,22 @@ window.addEventListener("load", () => {
   // Remove preloader after minimum display time
   const preloader = document.querySelector(".preloader");
   if (preloader) {
-    // Force preloader to show for at least 2 seconds (2000ms)
     const minimumLoadingTime = 0;
     const startTime = Date.now();
     const elapsedTime = Date.now() - startTime;
     const remainingTime = Math.max(minimumLoadingTime - elapsedTime, 0);
     
     setTimeout(() => {
-      // Add hiding class for fade out animation
       preloader.classList.add("hiding");
-      
-      // Wait for animation to complete then hide
       setTimeout(() => {
         preloader.style.display = "none";
       }, 500);
     }, remainingTime);
   }
+
+  // Create stars and layers
+  createStarLayers();
+  createStars();
 
   // Scroll animations for sections
   const sections = document.querySelectorAll("section");
@@ -57,7 +102,7 @@ window.addEventListener("load", () => {
     });
   });
   
-  // Read More functionality for review cards - duplicated in window.load for reliability
+  // Read More functionality for review cards
   initReadMoreButtons();
 });
 
@@ -165,95 +210,8 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   /*** Starry Background Functions ***/
-  function createStars() {
-    const starsContainer = document.querySelector(".stars");
-    if (!starsContainer) return;
-    
-    const starCount = 150;
-    for (let i = 0; i < starCount; i++) {
-      const star = document.createElement("div");
-      star.className = "star";
-
-      // Random position
-      const x = Math.random() * 100;
-      const y = Math.random() * 100;
-
-      // Random size (small stars look better)
-      const size = Math.random() * 2 + 1;
-
-      // Random twinkle speed
-      const twinkleDuration = Math.random() * 3 + 2;
-
-      // Random drift speed and direction
-      const driftDuration = Math.random() * 50 + 30; // Between 30-80 seconds for full drift
-      const driftDistance = Math.random() * 10 + 5; // Distance to drift in pixels
-      const driftDirection = Math.random() * 360; // Random direction in degrees
-
-      star.style.left = `${x}%`;
-      star.style.top = `${y}%`;
-      star.style.width = `${size}px`;
-      star.style.height = `${size}px`;
-      star.style.animationDuration = `${twinkleDuration}s, ${driftDuration}s`;
-      star.style.setProperty("--drift-distance", `${driftDistance}px`);
-      star.style.setProperty("--drift-direction", `${driftDirection}deg`);
-
-      starsContainer.appendChild(star);
-    }
-  }
-
-  function createParallaxStars() {
-    const starsContainer = document.querySelector(".stars");
-    if (!starsContainer) return;
-    
-    const layers = 3;
-    const starsPerLayer = 50;
-
-    for (let layer = 1; layer <= layers; layer++) {
-      const layerElement = document.createElement("div");
-      layerElement.className = `star-layer star-layer-${layer}`;
-
-      for (let i = 0; i < starsPerLayer; i++) {
-        const star = document.createElement("div");
-        star.className = "star";
-
-        // Random position
-        const x = Math.random() * 100;
-        const y = Math.random() * 100;
-
-        // Random size (farther layers have smaller stars)
-        const size = Math.random() * (4 - layer) + 1;
-
-        // Random twinkle speed
-        const duration = Math.random() * 3 + 2;
-
-        star.style.left = `${x}%`;
-        star.style.top = `${y}%`;
-        star.style.width = `${size}px`;
-        star.style.height = `${size}px`;
-        star.style.animationDuration = `${duration}s`;
-
-        layerElement.appendChild(star);
-      }
-
-      starsContainer.appendChild(layerElement);
-    }
-
-    // Parallax effect based on mouse movement
-    document.addEventListener("mousemove", function (e) {
-      const mouseX = e.clientX / window.innerWidth;
-      const mouseY = e.clientY / window.innerHeight;
-
-      document.querySelectorAll(".star-layer").forEach((layer, index) => {
-        const depth = index + 1;
-        const moveX = (mouseX - 0.5) * depth * 20;
-        const moveY = (mouseY - 0.5) * depth * 20;
-        layer.style.transform = `translate(${moveX}px, ${moveY}px)`;
-      });
-    });
-  }
-
+  // Create stars immediately when DOM is ready
   createStars();
-  createParallaxStars();
 
   // Initialize read more buttons
   initReadMoreButtons();

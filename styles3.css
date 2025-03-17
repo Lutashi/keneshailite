@@ -28,9 +28,6 @@ body {
 }
 
 /* Starry Background */
-/* Enhanced Starry Background */
-/* Star container */
-/* More compatible star animation */
 .stars {
   position: fixed;
   top: 0;
@@ -40,9 +37,30 @@ body {
   z-index: -1;
   overflow: hidden;
   pointer-events: none;
+  background-color: #1a1a2e;
 }
 
-/* Create multiple star layers that move at different speeds */
+/* Star elements */
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+@keyframes starMove {
+  0% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(25px, -25px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+/* Star layers */
 .star-layer-1,
 .star-layer-2,
 .star-layer-3 {
@@ -63,67 +81,44 @@ body {
     radial-gradient(2.5px 2.5px at 110px 80px, white, rgba(0, 0, 0, 0));
   background-repeat: repeat;
   background-size: 200px 200px;
-}
-
-.star-layer-1 {
-  animation: twinkle 4s ease-in-out infinite alternate,
-    drift1 80s linear infinite;
+  opacity: 0.7;
+  animation: layerTwinkle 1s ease-in-out infinite alternate;
 }
 
 .star-layer-2 {
   background-position: 50px 50px;
-  animation: twinkle 6s ease-in-out infinite alternate-reverse,
-    drift2 120s linear infinite;
+  animation: layerTwinkle 6s ease-in-out infinite alternate-reverse;
 }
 
 .star-layer-3 {
   background-position: 100px 150px;
-  animation: twinkle 5s ease-in-out infinite alternate,
-    drift3 150s linear infinite;
+  animation: layerTwinkle 5s ease-in-out infinite alternate;
 }
 
-@keyframes twinkle {
+@keyframes layerTwinkle {
   0% {
-    opacity: 0.7;
+    opacity: 0.3;
   }
   100% {
     opacity: 1;
   }
 }
 
-@keyframes drift1 {
-  0% {
-    transform: translate(0, 0);
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .star-layer-1,
+  .star-layer-2,
+  .star-layer-3 {
+    background-size: 150px 150px;
+    animation-duration: 3s;
   }
-  50% {
-    transform: translate(-100px, 50px);
-  }
-  100% {
-    transform: translate(0, 0);
-  }
-}
 
-@keyframes drift2 {
-  0% {
-    transform: translate(0, 0);
+  .star-layer-2 {
+    background-position: 25px 25px;
   }
-  50% {
-    transform: translate(80px, -40px);
-  }
-  100% {
-    transform: translate(0, 0);
-  }
-}
 
-@keyframes drift3 {
-  0% {
-    transform: translate(0, 0);
-  }
-  50% {
-    transform: translate(-60px, -60px);
-  }
-  100% {
-    transform: translate(0, 0);
+  .star-layer-3 {
+    background-position: 50px 75px;
   }
 }
 
@@ -1802,7 +1797,8 @@ section.visible {
 .credit-label {
     display: block;
     font-weight: 500;
-    margin-bottom: 3px;
+    margin-bottom: 5px;
+    margin-top: 10px;
     color: #FFD700;
     font-size: 0.95rem;
 }
@@ -1834,3 +1830,4 @@ section.visible {
         font-size: 0.9rem;
     }
 }
+
