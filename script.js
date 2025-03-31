@@ -532,3 +532,23 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 5000);
     });
 });
+
+// Read More Button Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const readMoreButtons = document.querySelectorAll('.read-more-btn');
+    
+    readMoreButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const reviewContent = this.previousElementSibling;
+            const isExpanded = reviewContent.classList.contains('expanded');
+            
+            if (isExpanded) {
+                reviewContent.classList.remove('expanded');
+                this.querySelector('span').textContent = 'Читать далее';
+            } else {
+                reviewContent.classList.add('expanded');
+                this.querySelector('span').textContent = 'Скрыть';
+            }
+        });
+    });
+});
